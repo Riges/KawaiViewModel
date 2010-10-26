@@ -1,0 +1,13 @@
+<?php
+/*
+ * Please rename this file 'options.php' and set all your parameters
+ * inside of it.
+ */
+
+$g_options['mysql']['host'] = '127.0.0.1';
+$g_options['mysql']['user'] = 'root';
+$g_options['mysql']['password'] = '';
+$g_options['mysql']['database'] = 'knb';
+$g_options['mysql']['port'] = 3306;
+
+?>

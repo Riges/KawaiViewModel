@@ -1,0 +1,158 @@
+Micro-MVC supportant les principes des URL CRUD ( http://microformats.org/wiki/rest/urls )en PHP
+
+A réfléchir / faire / écrire :
+ * Préciser un peu plus comment les views s'intègrent à tout ça.
+   Surtout pour résoudre le cas d'une page composite comme celle d'acceuil 
+
+-----------------------------------------------------------------------------------------------------
+
+GET knb.fr/news/
+	-> [news/indexController.php] News_IndexController->getAction(null, null)
+
+GET knb.fr/news/2008-04-05
+	-> [news/indexController.php] News_IndexController->getIndex($date, null)
+
+GET knb.fr/news/2008-04-05/Premiere_news_sur_le_site_final
+	-> [news/indexController.php] News_IndexController->getIndex($date, $title)
+
+POST knb.fr/news/2008-04-05/Premiere_news_sur_le_site_final?_method=DELETE
+	-> [news/indexController.php] News_IndexController->deleteIndex($date, $title)
+
+POST knb.fr/news/?_method=PUT
+	-> [news/indexController.php] News_IndexController->putIndex()
+
+-----------------------------------------------------------------------------------------------------
+
+// Affichage de la page fanficts
+GET knb.fr/fanficts/
+	-> [application/fanficts/Controller.php] FanfictsController->getAllAction()
+	   $this->setView('listall');
+	-> [application/fanficts/getListallActionView.html.php]
+
+// Click sur "Mes ficts"
+GET knb.fr/ri-chan/
+	-> [fanficts/Controller.php] FanfictsController->getForuserAction($user)
+	   $this->setView('list');
+	-> [fanficts/getListActionView.html.php]
+
+// Click sur "Ecrire une fict"
+GET knb.fr/fanficts/new/
+	-> [fanficts/Controller.php] FanfictsController->getNewAction()
+	   $this->setView('edit');
+	-> [fanficts/getEditAction.html.php]
+
+// Click sur "Envoyer"
+POST knb.fr/fanficts/
+	-> [fanficts/Controller.php] FanfictsController->postAction()
+	   $this->redirect('', array($user, $title))
+
+// Auto à cause du redirect
+GET knb.fr/fanficts/ri-chan/Encore_et_toujours_du_yaoi
+	-> [fanficts/Controller.php] FanfictsController->getAction($user, $title)
+
+// Click sur "Modifier ma fict"
+GET knb.fr/fanficts/ri-chan/Encore_et_toujours_du_yaoi/edit
+	-> [fanficts/Controller.php] FanfictsController->getEditAction($user, $title)
+
+// Click sur envoyer
+PUT knb.fr/fanficts/ri-chan/Encore_et_toujours_du_yaoi
+	-> [fanficts/Controller.php] FanfictsController->putAction($user, $title)
+
+// Click sur supprimer
+POST knb.fr/fanficts/ri-chan/Encore_et_toujours_du_yaoi?_method=DELETE
+	-> [fanficts/Controller.php] FanfictsController->deleteAction($user, $title)
+
+Dispatcher.php
+	class Dispatcher
+	{
+		public function getSubModules()
+		{
+			return array(
+				'news',
+				'fanficts',
+				'admin',
+				);
+		}
+		
+		public function getActions()
+		{
+			return array(
+				'GET' => array(
+					'' => array(0 => '')
+					)
+				);
+		}
+	}
+
+fanficts/FanfictsDispatcher.php
+	class FanfictsDispatcher
+	{
+		public function getSubModules()
+		{
+			return null;
+		}
+
+		public function getActions()
+		{
+			return array(
+				'GET' => array(
+					'' => array(0 => 'all', 1 => 'foruser', 2 => ''),
+					'new' => array(0 => 'new'),
+					'edit' => array(0 => 'edit'),
+					),
+				'PUT' => array(
+					'' => array(2 => '')
+					),
+				'POST' => array(
+					'' => array(0 => ''),
+					),
+				'DELETE' => array(
+					'' => array(2 => '')
+					),
+
+				);
+		}
+	}
+
+fanficts/FanfictsController.php
+	class FanfictsController
+	{
+		public function getAction() {}
+
+		public function getNewAction() {}
+		public function postAction() {}
+
+		public function getEditAction() {}
+		public function putAction() {}
+	}
+
+news/NewsDispatcher.php
+	*** FILE NOT FOUND ***
+
+news/NewsController.php
+	class NewsController
+	{
+	}
+
+* Si il n'y à pas de fichier dispatcher alors le Controller est cherché pour savoir si il connait la méthode
+  => Si non boom.
+
+
+Dispatch de GET fanficts/ri-chan/Encore_et_toujours_du_yaoi
+	* Lecture de /SubModules.php
+	* Il existe un sub module qui s'apelle 'fanficts'
+	* Il n'as pas de submodules, donc on ne cherche pas le fichier 'fanficts/FanfictsSubModules.php'
+	* require_once 'fanficts/FanfictsController.php'
+	* Recherche de la méthode getRi-chanAction qui n'existe pas
+	* Recherche de getAction qui existe
+	* Appel de getAction avec en paramètres "ri-chan" et "Encore_et_toujours_du_yaoi"
+
+Dispatch de GET users/ri-chan/fanficts/Encore_et_toujours_du_yaoi/edit
+	* Lecture de /root_Dispatcher.php
+	* Il existe un module qui s'apelle 'users'
+	* Lecture de /users/users_Dispatcher.php
+	* Il existe un module qui s'apelle 'fanficts' avec 1 paramètre
+	* Lecture de /users/fanficts/fanficts_Dispatcher.php
+	* Aucun module ne match, mais il existe une action edit qui prends un paramètre.
+	* Lecture de /users/fanficts/fanficts_Controller.php
+	* Appel de getEditAction('ri-chan', 'Encore_et_toujours_du_yaoi')

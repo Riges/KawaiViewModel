@@ -1,0 +1,380 @@
+body
+{
+	margin: 0;
+	padding: 0;
+	background-color: #aeebff;
+	font-family: sans-serif;
+	color: #13c3fe;
+}
+#bg-left, #bg-right
+{
+	z-index: -1;
+	position: absolute;
+	top: 0;
+	height: 416px;
+	background-repeat: repeat-x;
+}
+#bg-right
+{
+	left: 50%;
+	right: 0;
+	background-image: url("../img/bg-right.png");
+}
+#bg-left
+{
+	right: 50%;
+	left: 0;
+	background-image: url("../img/bg-left.png");
+}			
+#header
+{
+	background: url("../img/head.png");
+	width: 1000px;
+	margin: 0 auto;
+	padding: 0;
+	height: 271px;
+	overflow: hidden;
+}
+#member
+{
+	color: #3191ac;
+	float: right;
+	overflow: hidden;
+	margin : 123px 60px 0 0;
+	height: 130px;
+	width: 130px;
+	padding:6px 12px 6px 14px;
+	font-size: 10px;
+}
+
+input[type="text"]
+{
+	background: url("../img/input_background.png");
+	width: 124px;
+	height: 18px;
+	vertical-align: bottom;
+	border: 1px solid #8fd0e5;
+	color: #3191ac;
+}
+
+#loginform input[type="text"],
+#loginform input[type="password"]
+{
+	display: block;
+	background: url("../img/input_background.png");
+	padding: 0;
+	margin: 0 0 6px 0;
+	width: 124px;
+	height: 18px;
+	vertical-align: bottom;
+	border: 1px solid #8fd0e5;
+	color: #3191ac;
+}
+
+#loginform input[type="submit"]
+{
+	margin: 0;
+	margin-left: 48px;
+	padding-top: 27px;
+	background: url("../img/ok-button.png") top left no-repeat; 
+	width: 78px;
+	height: 27px;
+	border: none;	
+}
+
+#loginform input[type="submit"]:hover,
+#loginform input[type="submit"]:active
+{
+	background: url("../img/ok-button-hover.png");
+}
+
+#mainmenu
+{
+	background: url("../img/mainmenu-bg.png");
+	width: 825px;
+	height: 61px;
+	margin: 0 auto;
+	padding: 0 175px 0 0;
+	overflow: hidden;
+}
+#mainmenu ul
+{
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	float: right;
+}
+#mainmenu li
+{
+	float: left;
+	margin: 0;
+	padding: 0;
+	width:77px;
+	height:61px;
+	background-repeat: no-repeat;
+	background-position: left top;
+	background-image: url("../img/mainmenu-btn-bg.png");
+}
+#mainmenu li:hover
+{
+	background-position: -77px 0px;
+}
+#mainmenu a
+{
+	display: block;
+	overflow: hidden;
+	border:0;
+	width:75px;
+	height:0px;
+	padding-top:61px;
+	margin-left:2px;
+	background-position: left top;
+	background-repeat: no-repeat;
+}
+#mainmenu a:hover
+{
+	background-position: -75px 0px;
+}
+#main
+{
+	background-repeat: repeat-y;
+	background-image: url("../img/main-bg.png");
+	width: 1000px;
+	margin: 0 auto;
+	padding: 0;
+	overflow: hidden;
+}
+#submenu
+{
+	width: 130px;
+	margin: 0;
+	float: left;
+	padding: 10px 0 0 45px;
+	background-repeat: no-repeat;
+	background-image: url("../img/submenu-bg.png");
+	min-height: 176px;
+}
+#submenu h2
+{
+	background-image: url("../img/submenu-title-bg.png");
+	height: 35px;
+	width: 122px;
+	padding:7px 0 0 0;
+	margin: 0 0 5px 0;
+	overflow: hidden;
+	text-align: center;
+	font-size : 23px;
+	font-weight:bold;
+	font-variant: small-caps;
+}
+#submenu ul
+{
+	margin: 0 0 10px 0;
+	padding: 0;
+	list-style-type: none;
+}
+#submenu li
+{
+	padding-top: 2px;
+}
+#submenu li:before
+{
+	display: marker;
+	content: url("../img/puce.png");
+	padding-right: 5px;
+}
+#submenu a
+{
+	text-decoration: none;
+	font-weight: bold;
+}
+#submenu a:link
+{
+	color:#5387c9;
+}
+#submenu a:visited
+{
+	color:#3777c9;
+}
+#submenu a:hover
+{
+	color:#81a1c9;
+}
+#content
+{
+	width: 823px;
+	margin: 0;
+	float:right;
+}
+h1
+{
+	overflow: hidden;
+	width: 798px;
+	height: 46px;
+	color: white;
+	margin: 0;
+	padding: 38px 0 0 25px;
+	background-repeat: no-repeat;
+	background-image: url("../img/maintitle-bg.png");
+	font-size : 23px;
+	font-weight:bold;
+	font-variant: small-caps;
+}
+#text
+{
+	width: 540px; /* 544px if no space between text and smallbox*/
+	overflow: hidden;
+	float:left;
+}
+
+#fulltext
+{
+	width: 703px;
+	overflow: hidden;
+}
+
+#text, #fulltext
+{
+	margin: 0;
+	padding: 0 10px;	
+	color: #0059c9;
+}
+#text p, #fulltext p
+{
+	margin: 0 0 1em 0;
+}
+#smallboxbox
+{
+	float:right;
+	margin: 0 100px 10px 0;
+}
+.smallbox
+{
+	margin-bottom: 5px;
+	width: 159px;
+	font-size: x-small;
+	background-repeat: repeat-y;
+	background-image: url("../img/smallbox-bg.png");
+}
+.smallbox h2
+{
+	width: 132px;
+	height: 26px;
+	background-image: url("../img/smallbox-top-bg.png");
+	margin: 0;
+	padding: 10px 0 0 27px;
+	color: white;
+	font-size: 16px;
+	font-weight:bold;
+	font-variant: small-caps;				
+}
+.smallbox .text
+{
+	background-image: url("../img/smallbox-text-bg.png");
+	background-repeat: no-repeat;
+}
+.smallbox .bottom
+{
+	height: 9px;
+	background-image: url("../img/smallbox-bottom-bg.png");
+}
+.smallbox p
+{
+	margin: 0;
+	padding: 0 8px 0 8px;
+}
+.smallbox p:last-child
+{
+	padding-bottom: 0;
+}
+#footer
+{
+	width: 907px;
+	/*height: 119px;*/
+	height: 17px;
+	margin: 0 auto;
+	padding: 102px 0 0 93px;
+	overflow: hidden;
+	background-image: url("../img/footer.png");
+	font-size: 14px;
+	font-weight:bold;
+	font-variant: small-caps;
+	color: white;
+}
+#footer-bg
+{
+	left:0;
+	right:0;
+	height: 119px;
+	background-repeat: repeat-x;
+	background-image: url("../img/footer-bg.png");
+}
+
+pre#debug-mvc
+{
+	margin: 0;
+	padding: 5px;
+	border: 1px solid black;
+	overflow: auto;
+	background-color: white;
+}
+
+table.edit td.description
+{
+	text-align : right;
+}
+
+#news
+{
+	width: 652px;
+}
+
+#news .news-head
+{
+	width: 642px;
+	height: 33px;
+	padding-left: 10px;
+	background-repeat: no-reapeat;
+	background-image: url("../img/news-head.png");
+}
+#news .news-head a
+{
+	color: #FFFFFF;
+	text-decoration : none;	
+}
+
+#news .news-content
+{
+	min-height: 160px;
+	color: #13c3fe;
+	background-repeat: no-repeat;
+	background-image: url("../img/news-content-bg.png");
+}
+
+#news .news-content .text
+{
+	width: 600px;
+	float:right;
+	padding-right: 26px;
+	padding-top: 15px;
+}
+
+#news .news-create
+{
+	float: right;
+	width: 292px;
+	height: 25px;
+	color: #FFFFFF;
+	background-repeat: no-repeat;
+	background-image: url("../img/news-author.png");
+	padding-top: 2px;
+}
+
+#news .news-create a
+{
+	color: #FFFFFF;
+	text-decoration : none;
+	font-weight: bold;
+	padding-left: 80px;
+	
+}
