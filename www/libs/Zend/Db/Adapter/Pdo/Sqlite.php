@@ -15,19 +15,17 @@
  * @category   Zend
  * @package    Zend_Db
  * @subpackage Adapter
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Sqlite.php 20096 2010-01-06 02:05:09Z bkarwin $
  */
 
+
 /**
- * Zend_Db_Adapter_Pdo_Abstract
+ * @see Zend_Db_Adapter_Pdo_Abstract
  */
 require_once 'Zend/Db/Adapter/Pdo/Abstract.php';
 
-/**
- * Zend_Db_Adapter_Exception
- */
-require_once 'Zend/Db/Adapter/Exception.php';
 
 /**
  * Class for connecting to SQLite2 and SQLite3 databases and performing common operations.
@@ -35,7 +33,7 @@ require_once 'Zend/Db/Adapter/Exception.php';
  * @category   Zend
  * @package    Zend_Db
  * @subpackage Adapter
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
@@ -107,6 +105,7 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
     {
         // we need at least a dbname
         if (! array_key_exists('dbname', $config)) {
+            /** @see Zend_Db_Adapter_Exception */
             require_once 'Zend/Db/Adapter/Exception.php';
             throw new Zend_Db_Adapter_Exception("Configuration array must have a key for 'dbname' that names the database instance");
         }
@@ -140,6 +139,7 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
         $retval = $this->_connection->exec('PRAGMA full_column_names=0');
         if ($retval === false) {
             $error = $this->_connection->errorInfo();
+            /** @see Zend_Db_Adapter_Exception */
             require_once 'Zend/Db/Adapter/Exception.php';
             throw new Zend_Db_Adapter_Exception($error[2]);
         }
@@ -147,6 +147,7 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
         $retval = $this->_connection->exec('PRAGMA short_column_names=1');
         if ($retval === false) {
             $error = $this->_connection->errorInfo();
+            /** @see Zend_Db_Adapter_Exception */
             require_once 'Zend/Db/Adapter/Exception.php';
             throw new Zend_Db_Adapter_Exception($error[2]);
         }
@@ -196,11 +197,13 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
      */
     public function describeTable($tableName, $schemaName = null)
     {
+        $sql = 'PRAGMA ';
+
         if ($schemaName) {
-            $sql = "PRAGMA $schemaName.table_info($tableName)";
-        } else {
-            $sql = "PRAGMA table_info($tableName)";
+            $sql .= $this->quoteIdentifier($schemaName) . '.';
         }
+
+        $sql .= 'table_info('.$this->quoteIdentifier($tableName).')';
 
         $stmt = $this->query($sql);
 
@@ -271,11 +274,15 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
     {
         $count = intval($count);
         if ($count <= 0) {
+            /** @see Zend_Db_Adapter_Exception */
+            require_once 'Zend/Db/Adapter/Exception.php';
             throw new Zend_Db_Adapter_Exception("LIMIT argument count=$count is not valid");
         }
 
         $offset = intval($offset);
         if ($offset < 0) {
+            /** @see Zend_Db_Adapter_Exception */
+            require_once 'Zend/Db/Adapter/Exception.php';
             throw new Zend_Db_Adapter_Exception("LIMIT argument offset=$offset is not valid");
         }
 

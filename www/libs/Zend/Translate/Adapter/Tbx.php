@@ -14,8 +14,8 @@
  *
  * @category   Zend
  * @package    Zend_Translate
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Date.php 2498 2006-12-23 22:13:38Z thomas $
+ * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
+ * @version    $Id: Tbx.php 20096 2010-01-06 02:05:09Z bkarwin $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -30,7 +30,7 @@ require_once 'Zend/Translate/Adapter.php';
 /**
  * @category   Zend
  * @package    Zend_Translate
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Translate_Adapter_Tbx extends Zend_Translate_Adapter {
@@ -40,23 +40,8 @@ class Zend_Translate_Adapter_Tbx extends Zend_Translate_Adapter {
     private $_langset     = null;
     private $_termentry   = null;
     private $_content     = null;
-    private $_defined     = false;
     private $_term        = null;
-
-    /**
-     * Generates the tbx adapter
-     * This adapter reads with php's xml_parser
-     *
-     * @param  string              $data     Translation data
-     * @param  string|Zend_Locale  $locale   OPTIONAL Locale/Language to set, identical with locale identifier,
-     *                                       see Zend_Locale for more information
-     * @param  array               $options  OPTIONAL Options to set
-     */
-    public function __construct($data, $locale = null, array $options = array())
-    {
-        parent::__construct($data, $locale, $options);
-    }
-
+    private $_data        = array();
 
     /**
      * Load translation data (TBX file reader)
@@ -66,25 +51,18 @@ class Zend_Translate_Adapter_Tbx extends Zend_Translate_Adapter {
      *                            the source file
      * @param  array   $option    OPTIONAL Options to use
      * @throws Zend_Translation_Exception
+     * @return array
      */
     protected function _loadTranslationData($filename, $locale, array $options = array())
     {
-        $options = array_merge($this->_options, $options);
-
-        if ($options['clear']) {
-            $this->_translate = array();
-        }
-
-        if ((in_array('defined_language', $options)) and !empty($options['defined_language'])) {
-            $this->_defined = true;
-        }
-
+        $this->_data = array();
         if (!is_readable($filename)) {
             require_once 'Zend/Translate/Exception.php';
             throw new Zend_Translate_Exception('Translation file \'' . $filename . '\' is not readable.');
         }
 
-        $this->_file = xml_parser_create();
+        $encoding = $this->_findEncoding($filename);
+        $this->_file = xml_parser_create($encoding);
         xml_set_object($this->_file, $this);
         xml_parser_set_option($this->_file, XML_OPTION_CASE_FOLDING, 0);
         xml_set_element_handler($this->_file, "_startElement", "_endElement");
@@ -98,6 +76,8 @@ class Zend_Translate_Adapter_Tbx extends Zend_Translate_Adapter {
             require_once 'Zend/Translate/Exception.php';
             throw new Zend_Translate_Exception($ex);
         }
+
+        return $this->_data;
     }
 
     private function _startElement($file, $name, $attrib)
@@ -114,10 +94,10 @@ class Zend_Translate_Adapter_Tbx extends Zend_Translate_Adapter {
                     $this->_termentry = null;
                     break;
                 case 'langset':
-                    if (array_key_exists('xml:lang', $attrib)) {
+                    if (isset($attrib['xml:lang']) === true) {
                         $this->_langset = $attrib['xml:lang'];
-                        if (!array_key_exists($this->_langset, $this->_translate)) {
-                            $this->_translate[$this->_langset] = array();
+                        if (isset($this->_data[$this->_langset]) === false) {
+                            $this->_data[$this->_langset] = array();
                         }
                     }
                     break;
@@ -145,8 +125,8 @@ class Zend_Translate_Adapter_Tbx extends Zend_Translate_Adapter {
                     if (empty($this->_termentry)) {
                         $this->_termentry = $this->_content;
                     }
-                    if (!empty($this->_content) or !array_key_exists($this->_termentry, $this->_translate[$this->_langset])) {
-                        $this->_translate[$this->_langset][$this->_termentry] = $this->_content;
+                    if (!empty($this->_content) or (isset($this->_data[$this->_langset][$this->_termentry]) === false)) {
+                        $this->_data[$this->_langset][$this->_termentry] = $this->_content;
                     }
                     break;
                 default:
@@ -160,6 +140,17 @@ class Zend_Translate_Adapter_Tbx extends Zend_Translate_Adapter {
         if ($this->_term !== null) {
             $this->_content .= $data;
         }
+    }
+
+    private function _findEncoding($filename)
+    {
+        $file = file_get_contents($filename, null, null, 0, 100);
+        if (strpos($file, "encoding") !== false) {
+            $encoding = substr($file, strpos($file, "encoding") + 9);
+            $encoding = substr($encoding, 1, strpos($encoding, $encoding[0], 1) - 1);
+            return $encoding;
+        }
+        return 'UTF-8';
     }
 
     /**

@@ -1,8 +1,8 @@
 Micro-MVC supportant les principes des URL CRUD ( http://microformats.org/wiki/rest/urls )en PHP
 
-A réfléchir / faire / écrire :
- * Préciser un peu plus comment les views s'intègrent à tout ça.
-   Surtout pour résoudre le cas d'une page composite comme celle d'acceuil 
+A rÃ©flÃ©chir / faire / Ã©crire :
+ * PrÃ©ciser un peu plus comment les views s'intÃ¨grent Ã  tout Ã§a.
+   Surtout pour rÃ©soudre le cas d'une page composite comme celle d'acceuil 
 
 -----------------------------------------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ POST knb.fr/fanficts/
 	-> [fanficts/Controller.php] FanfictsController->postAction()
 	   $this->redirect('', array($user, $title))
 
-// Auto à cause du redirect
+// Auto Ã  cause du redirect
 GET knb.fr/fanficts/ri-chan/Encore_et_toujours_du_yaoi
 	-> [fanficts/Controller.php] FanfictsController->getAction($user, $title)
 
@@ -134,7 +134,7 @@ news/NewsController.php
 	{
 	}
 
-* Si il n'y à pas de fichier dispatcher alors le Controller est cherché pour savoir si il connait la méthode
+* Si il n'y Ã  pas de fichier dispatcher alors le Controller est cherchÃ© pour savoir si il connait la mÃ©thode
   => Si non boom.
 
 
@@ -143,16 +143,16 @@ Dispatch de GET fanficts/ri-chan/Encore_et_toujours_du_yaoi
 	* Il existe un sub module qui s'apelle 'fanficts'
 	* Il n'as pas de submodules, donc on ne cherche pas le fichier 'fanficts/FanfictsSubModules.php'
 	* require_once 'fanficts/FanfictsController.php'
-	* Recherche de la méthode getRi-chanAction qui n'existe pas
+	* Recherche de la mÃ©thode getRi-chanAction qui n'existe pas
 	* Recherche de getAction qui existe
-	* Appel de getAction avec en paramètres "ri-chan" et "Encore_et_toujours_du_yaoi"
+	* Appel de getAction avec en paramÃ¨tres "ri-chan" et "Encore_et_toujours_du_yaoi"
 
 Dispatch de GET users/ri-chan/fanficts/Encore_et_toujours_du_yaoi/edit
 	* Lecture de /root_Dispatcher.php
 	* Il existe un module qui s'apelle 'users'
 	* Lecture de /users/users_Dispatcher.php
-	* Il existe un module qui s'apelle 'fanficts' avec 1 paramètre
+	* Il existe un module qui s'apelle 'fanficts' avec 1 paramÃ¨tre
 	* Lecture de /users/fanficts/fanficts_Dispatcher.php
-	* Aucun module ne match, mais il existe une action edit qui prends un paramètre.
+	* Aucun module ne match, mais il existe une action edit qui prends un paramÃ¨tre.
 	* Lecture de /users/fanficts/fanficts_Controller.php
 	* Appel de getEditAction('ri-chan', 'Encore_et_toujours_du_yaoi')

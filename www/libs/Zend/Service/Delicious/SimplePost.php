@@ -16,9 +16,9 @@
  * @category   Zend
  * @package    Zend_Service
  * @subpackage Delicious
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: SimplePost.php 8055 2008-02-15 21:42:54Z thomas $
+ * @version    $Id: SimplePost.php 20096 2010-01-06 02:05:09Z bkarwin $
  */
 
 
@@ -28,7 +28,7 @@
  * @category   Zend
  * @package    Zend_Service
  * @subpackage Delicious
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Service_Delicious_SimplePost
@@ -56,8 +56,9 @@ class Zend_Service_Delicious_SimplePost
     /**
      * Constructor
      *
-     * @param  array $post Post data
-     * @return void
+     * @param   array $post Post data
+     * @return  void
+     * @throws  Zend_Service_Delicious_Exception
      */
     public function __construct(array $post)
     {

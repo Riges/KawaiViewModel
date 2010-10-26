@@ -14,23 +14,22 @@
  *
  * @category   Zend
  * @package    Zend_Controller
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @subpackage Zend_Controller_Action_Helper
+ * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Abstract.php 20261 2010-01-13 18:55:25Z matthew $
  */
 
-
-/** Zend_Controller_Exception */
-require_once 'Zend/Controller/Action/Exception.php';
-
-/** Zend_Controller_Action */
+/**
+ * @see Zend_Controller_Action
+ */
 require_once 'Zend/Controller/Action.php';
-
 
 /**
  * @category   Zend
  * @package    Zend_Controller
- * @subpackage Zend_Controller_Action
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @subpackage Zend_Controller_Action_Helper
+ * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 abstract class Zend_Controller_Action_Helper_Abstract
@@ -38,20 +37,20 @@ abstract class Zend_Controller_Action_Helper_Abstract
     /**
      * $_actionController
      *
-     * @var Zend_Controller_Action
+     * @var Zend_Controller_Action $_actionController
      */
     protected $_actionController = null;
 
     /**
-     * @var mixed
+     * @var mixed $_frontController
      */
     protected $_frontController = null;
 
     /**
      * setActionController()
      *
-     * @param Zend_Controller_Action $actionController
-     * @return Zend_Controller_ActionHelper_Abstract
+     * @param  Zend_Controller_Action $actionController
+     * @return Zend_Controller_ActionHelper_Abstract Provides a fluent interface
      */
     public function setActionController(Zend_Controller_Action $actionController = null)
     {
@@ -71,16 +70,12 @@ abstract class Zend_Controller_Action_Helper_Abstract
 
     /**
      * Retrieve front controller instance
-     * 
+     *
      * @return Zend_Controller_Front
      */
     public function getFrontController()
     {
-        if (null === $this->_frontController) {
-            $this->_frontController = Zend_Controller_Front::getInstance();
-        }
-
-        return $this->_frontController;
+        return Zend_Controller_Front::getInstance();
     }
 
     /**
