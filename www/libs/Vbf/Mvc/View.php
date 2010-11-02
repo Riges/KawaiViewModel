@@ -62,14 +62,14 @@ class Vbf_Mvc_View
 		$this->forceParameterType($type, $name);
 	}
 	
-	private function __get($name)
+	public function __get($name)
 	{
 		$this->ensureParameterExists($name);
 		
 		return $this->parameters[$name];
 	}
 	
-	private function __set($name, $value)
+	public function __set($name, $value)
 	{
 		$this->parameters[$name] = $value;
 	}
@@ -95,6 +95,18 @@ class Vbf_Mvc_View
 	public function display()
 	{
 		require($this->viewFile);
+	}
+		
+	public function getSiteView($method, $uri, $acceptHeader)
+	{
+		ob_start();
+		$ft = new Knb_FrontController();
+		$ft->initialize($method, $uri, $acceptHeader);
+		$ft->run();
+		$buffer =  ob_get_clean();
+		//ob_end_clean();
+		
+		return trim($buffer);
 	}
 	
 	/*

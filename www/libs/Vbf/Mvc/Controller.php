@@ -131,6 +131,11 @@ abstract class Vbf_Mvc_Controller
 	 */
 	protected function redirectToUrl($url)
 	{
+		if(array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS']== "on")
+			$_SESSION['HTTP_REDIRECT'] = $_SERVER['REQUEST_URI'];
+		else
+			$_SESSION['HTTP_REDIRECT'] = $_SERVER['REQUEST_URI'];
+			//echo $_SERVER['HTTP_REFERER'];
 		header('location: ' . $url);
 		flush();
 		die();

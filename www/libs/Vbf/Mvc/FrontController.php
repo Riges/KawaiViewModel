@@ -274,6 +274,12 @@ class Vbf_Mvc_FrontController
 			$this->extension = 'html';
 		}
 		
+		if ($this->extension == 'htm')
+		{
+			//FIXME: Use the accept header to select one.
+			$this->extension = 'html';
+		}
+		
 		if (!array_key_exists($this->extension, self::$extensionContentType))
 		{
 			throw new Exception("Unknown extension : {$this->extension}.");  
