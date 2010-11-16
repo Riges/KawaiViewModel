@@ -8,6 +8,121 @@ function get_base_url()
 	return implode('/', $urlParts).'/';
 }
 
+function knb_exception_handler($exception)
+{
+	global $g_options;
+
+	/* For most users we want to display either the configured message if possible or a short error message.
+	 */
+	if (!isset($g_options['error']['debug']) || $g_options['error']['debug'] !== TRUE)
+	{
+		if (isset($g_options['error']['redirect'])
+			&& $g_options['error']['redirect'] !== FALSE
+			&& !headers_sent())
+		{
+			header('location: ' . $g_options['error']['redirect']);
+		}
+		else
+		{
+			echo "An exception has occured, please contact the site administrator";
+		}
+		exit;
+	}
+
+	/* We will use some functions like var_export that don't like for any buffering to be in progress.
+	 */
+	while (@ob_end_clean());
+
+	$sanitize_func = create_function('&$a', 'if (is_string($a)) { $a = htmlentities($a); }');
+	$css = get_base_url() . 'styles/error.css';
+
+	$html = '<html>';
+	$html .= '<head><title>Exception</title>';
+	$html .= '<link rel="stylesheet" href="'.$css.'" type="text/css"></head>';
+	$html .= '<body><h1>'.htmlentities(get_class($exception)).'</h1>';
+
+	$html .= '<p id="message">'.htmlentities($exception->getMessage()).'</p>';
+	$html .= '<p>At line <span id="line">'.$exception->getLine().'</span>';
+	$html .= ' of <span id="file">'.htmlentities($exception->getFile()).'</span></p>';
+
+	$html .= '<ul id="stacktrace">';
+	foreach ($exception->getTrace() as $trace)
+	{
+		array_walk($trace, $sanitize_func);
+
+		$html .= '<li>';
+
+		$html .= '<div class="caller">';
+
+		$reflectedCaller = null;
+
+		if (isset($trace['class']))
+		{
+			$html .= '<span class="class">'.$trace['class'].'</span>';
+			$html .= '<span class="type">'.$trace['type'].'</span>';
+
+			$reflectedCaller = new ReflectionMethod($trace['class'], $trace['function']);
+		}
+		else
+		{
+			try
+			{
+				$reflectedCaller = new ReflectionFunction($trace['function']);
+			}
+			catch(ReflectionException $e)
+			{
+				/* Internal function can't be reflected upon... we may have it one of them.
+				 */
+			}
+		}
+		$html .= '<span class="function">'.$trace['function'].'</span><span class="argdef">(';
+
+		if ($reflectedCaller !== null)
+		{
+			foreach($reflectedCaller->getParameters() as $arg)
+			{
+				if ($arg->isPassedByReference()) $html .= '&amp;';
+				$html .= '$'.htmlentities($arg->getName());
+				if ($arg->isDefaultValueAvailable())
+				{
+					$html .= ' = ';
+					$html .= htmlentities(var_export($arg->getDefaultValue(), TRUE));
+				}
+			}
+		}
+		else
+		{
+			$html .= "...";
+		}
+
+		$html .= ')</span></div>';
+
+		$html .= '<p class="position">';
+		$html .= 'At line <span class="line">'.$trace['line'].'</span> of ';
+		$html .= '<span class="file">'.$trace['file'].'</span></p>';
+
+		if (isset($trace['args']) && count($trace['args']))
+		{
+			$html .= '<p class="args">Argument values : </p>';
+			$html .= '<ul class="args">';
+			foreach($trace['args'] as $arg)
+			{
+				$html .= '<li>'.htmlentities(var_export($arg, TRUE)).'</li>';
+			}
+			$html .= '</ul>';
+		}
+
+		$html .= '</li>';
+	}
+	$html .= '</ul>';
+	$html .= '</html>';
+
+	echo $html;
+}
+
+set_exception_handler("knb_exception_handler");
+
+
 if (get_magic_quotes_gpc()) throw new Exception("magic_quotes_gpc is not supported");
 
 /******************************************************************************
