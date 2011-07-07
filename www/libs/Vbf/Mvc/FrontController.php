@@ -111,7 +111,7 @@ class Vbf_Mvc_FrontController
 		$moduleUriArray = array(), $resourceUriArray = array())
 	{
 		$currentPathString = implode('/', $currentPathArray);
-		$moduleName = (count($currentPathArray) > 0) ? $currentPathArray[0] : 'root';
+		$moduleName = (count($currentPathArray) > 0) ? end($currentPathArray) : 'root';
 		$dispatcher = $this->getDispatcherInstance($currentPathString, $moduleName);
 		$rules = $dispatcher->getDispatchRules();
 		
@@ -149,11 +149,8 @@ class Vbf_Mvc_FrontController
 			if ($type == 'module')
 			{
 				array_push($currentPathArray, $rule['name']);
-				if (count($currentPathArray) > 0)
-				{
-					array_push($moduleUriArray, $currentPathArray[0]);
-					array_push($resourceUriArray, $currentPathArray[0]);
-				}
+				array_push($moduleUriArray, end($currentPathArray));
+				array_push($resourceUriArray, end($currentPathArray));
 				if ($paramCount > 0)
 				{
 					$moduleUriArray = array_merge($moduleUriArray, $currentParameters);
