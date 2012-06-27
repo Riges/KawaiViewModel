@@ -104,7 +104,6 @@ class Vbf_Mvc_View
 		$ft->initialize($method, $uri, $acceptHeader);
 		$ft->run();
 		$buffer =  ob_get_clean();
-		//ob_end_clean();
 		
 		return trim($buffer);
 	}

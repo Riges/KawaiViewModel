@@ -265,13 +265,7 @@ class Vbf_Mvc_FrontController
 	{
 		$this->extension = $this->parsedUri['extension'];
 		
-		if ($this->extension == NULL)
-		{
-			//FIXME: Use the accept header to select one.
-			$this->extension = 'html';
-		}
-		
-		if ($this->extension == 'htm')
+		if ($this->extension == NULL || $this->extension == 'htm')
 		{
 			//FIXME: Use the accept header to select one.
 			$this->extension = 'html';
