@@ -23,23 +23,16 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
-		<script type="text/javascript">root_url = "<?php echo ROOT_URL; ?>";</script>
 		<title><?php if (!$this->noPageTitle) echo $title . ' - '; ?>Kawaï Neko Box<?php echo $svnRev; ?></title>
-		
-		
 
-		<script type='text/javascript' src="<?php echo $this->createUriFromBase('script/prototype.js'); ?>"></script>
-		<script type='text/javascript' src="<?php echo $this->createUriFromBase('script/scriptaculous.js'); ?>"></script>
+		<script type="text/javascript">root_url = "<?php echo ROOT_URL; ?>";</script>
 		<script type='text/javascript' src="<?php echo $this->createUriFromBase($g_options['jquery']['debug'] ? 'script/jquery.js' : 'script/jquery.min.js'); ?>"></script>
-		<script>
-			jQuery.noConflict();
-		</script>
-		<script type='text/javascript' src="<?php echo $this->createUriFromBase('script/ui/ui.core.js'); ?>"></script>
-		
+		<script type='text/javascript' src="<?php echo $this->createUriFromBase($g_options['bootstrap']['debug'] ? 'script/bootstrap.js' : 'script/bootstrap.min.js'); ?>"></script>
 		<script type='text/javascript' src="<?php echo $this->createUriFromBase('script/knb.js'); ?>"></script>
 		
+		<script type='text/javascript' src="<?php echo $this->createUriFromBase($g_options['bootstrap']['debug'] ? 'style/#SKIN#s/bootstrap.js' : 'style/#SKIN#s/bootstrap.min.js'); ?>"></script>
+		<script type='text/javascript' src="<?php echo $this->createUriFromBase($g_options['bootstrap']['debug'] ? 'style/#SKIN#s/bootstrap-responsive.js' : 'style/#SKIN#s/bootstrap-responsive.min.js'); ?>"></script>
 		<link rel="stylesheet" href="<?php echo $this->createUriFromBase('style/#SKIN#s/screen.css'); ?>" type="text/css" media="screen" />
-		<link rel="stylesheet" href="<?php echo $this->createUriFromBase('style/#SKIN#s/ui.datepicker.css'); ?>" type="text/css" media="screen" />
 		<link rel="stylesheet" href="<?php echo $this->createUriFromBase('style/#SKIN#s/print.css'); ?>" type="text/css" media="print" />
 		<!--[if IE]>
 		<link rel="stylesheet" href="<?php echo $this->createUriFromBase('style/#SKIN#s/internet-explorer.css'); ?>" type="text/css" media="screen" />
