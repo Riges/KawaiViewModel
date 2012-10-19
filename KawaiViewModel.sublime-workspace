@@ -1,0 +1,268 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"set",
+				"setColorSchem"
+			],
+			[
+				"g",
+				"getAppointmentByCustomerUserId  (function)"
+			],
+			[
+				"Kn",
+				"Knb_Controller"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "Packages/JSLint/JSLint.sublime-build",
+	"command_palette":
+	{
+		"height": 375.0,
+		"selected_items":
+		[
+			[
+				"sv",
+				"SVN: Commit…"
+			],
+			[
+				"SVN:com",
+				"SVN: Commit…"
+			],
+			[
+				"pac",
+				"Package Control: Install Package"
+			],
+			[
+				"pa",
+				"Package Control: Install Package"
+			],
+			[
+				"Pa",
+				"Package Control: Install Package"
+			],
+			[
+				"PHP",
+				"PHP Code Sniffer: Sniff this file"
+			],
+			[
+				"PA",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: iNS",
+				"Package Control: Install Package"
+			],
+			[
+				"p",
+				"Package Control: Install Package"
+			],
+			[
+				"svn:com",
+				"SVN: Commit…"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"chang",
+				"ChangeQuotes"
+			],
+			[
+				"change",
+				"ChangeQuotes"
+			],
+			[
+				"stack",
+				"Stackoverflow: Search from Input"
+			],
+			[
+				"PHP Code Sniffer: ",
+				"PHP Code Sniffer: Clear sniffer marks"
+			]
+		],
+		"width": 434.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/c/users/lfasqu~1/appdata/local/temp/sublime-svn-1350639968/SVN",
+		"/c/users/lfasqu~1/appdata/local/temp/sublime-svn-1350639951/SVN",
+		"/C/xampp/htdocs/leadis/marketplace/site/search/construction/construction_Model.php",
+		"/C/xampp/htdocs/leadis/marketplace/site/search/defiscalisation/defiscalisation_Model.php",
+		"/C/xampp/htdocs/leadis/backoffice/script-cli/cron/hourly/construction/auctionActivity.php",
+		"/C/xampp/htdocs/leadis/marketplace/site/lead/construction/construction_Model.php",
+		"/C/xampp/htdocs/leadis/marketplace/site/lead/construction/construction_Controller.php",
+		"/C/xampp/htdocs/leadis/marketplace/site/customer/customer_Controller.php",
+		"/C/xampp/htdocs/leadis/marketplace/site/customer/customer_Model.php",
+		"/C/xampp/htdocs/leadis/marketplace/styles/skin/default/wdCalendar/calendar.css",
+		"/C/xampp/htdocs/leadis/marketplace/site/customer/getCalendarActionView.html.php",
+		"/C/xampp/htdocs/leadis/marketplace/site/getActionView.html.php",
+		"/c/users/lfasqu~1/appdata/local/temp/sublime-svn-1350579441/SVN",
+		"/C/xampp/htdocs/leadis/marketplace/site/root_Controller.php",
+		"/C/xampp/htdocs/leadis/marketplace/site/root_Model.php",
+		"/C/xampp/htdocs/leadis/marketplace/script/knb.js",
+		"/C/xampp/htdocs/leadis/marketplace/styles/skin/default/screen.css",
+		"/C/xampp/htdocs/leadis/marketplace/script/leadis-table-generator.js",
+		"/C/Users/lfasquelle/AppData/Roaming/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/C/xampp/htdocs/leadis/marketplace/globals.inc.php",
+		"/C/xampp/htdocs/test2.html",
+		"/C/xampp/htdocs/leadis/backoffice/script/knb.js",
+		"/C/xampp/htdocs/leadis/api/libs/Leadis/TableGeneratorTools.php",
+		"/C/xampp/htdocs/leadis/www/script/knb.js",
+		"/c/users/lfasqu~1/appdata/local/temp/sublime-svn-1350570338/SVN",
+		"/C/xampp/htdocs/leadis/marketplace/site/getTableActionView.html.php",
+		"/C/Users/lfasquelle/AppData/Roaming/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/C/xampp/htdocs/leadis/backoffice/site/getActionView.html.php",
+		"/C/xampp/htdocs/leadis/backoffice/site/getActionView.xml.php",
+		"/C/Users/lfasquelle/Documents/crm/api/site/subscription/subscription_Model.php",
+		"/C/xampp/htdocs/leadis/backoffice/img/skin/default/export-pdf/logo.png",
+		"/C/xampp/htdocs/leadis/backoffice/img/skin/default/export-pdf/bg.png",
+		"/C/xampp/htdocs/leadis/backoffice/img/skin/default/export-pdf/pointer_big.jpg",
+		"/C/xampp/htdocs/leadis/backoffice/img/skin/default/export-pdf/logo_big.jpg",
+		"/C/xampp/htdocs/leadis/backoffice/img/skin/default/export-pdf/pointer.jpg",
+		"/C/xampp/htdocs/leadis/backoffice/img/skin/default/export-pdf/bg_footer.jpg",
+		"/C/xampp/htdocs/leadis/backoffice/img/skin/default/export-pdf/pointer.png",
+		"/C/xampp/htdocs/leadis/backoffice/img/skin/default/export-pdf/logo.jpg",
+		"/C/xampp/htdocs/fb-test.php"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"C:\\xampp\\htdocs\\leadis\\backoffice\\script-cli\\cron",
+			"C:\\xampp\\htdocs\\leadis\\marketplace\\script-cli",
+			"C:\\xampp\\htdocs\\leadis\\marketplace\\site"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"customer_id",
+			"showtodaybtn",
+			"showweekbtn",
+			"td",
+			"thead",
+			"\"Gestion de mes prospects\""
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 113.0
+	},
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"knb",
+				"backoffice/script/knb.js"
+			],
+			[
+				"tablege",
+				"api/libs/Leadis/TableGeneratorTools.php"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"",
+				"/C/xampp/htdocs/leadis/marketplace/site/leadis.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 322.0,
+	"status_bar_visible": true
+}

@@ -3,7 +3,7 @@ class Users
 {
 	public static function getList()
 	{
-		global $g_database;
+        global $g_database;
 		return $g_database->fetchAll("SELECT * FROM user");
 	}
 
