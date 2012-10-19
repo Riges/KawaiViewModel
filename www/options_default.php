@@ -38,7 +38,9 @@ $g_options['autoload'][] = array(
 
 $g_options['skin']['dir'] =  ROOT_PATH . 'skins/';
 $g_options['skin']['url'] = ROOT_URL . 'skins/';
+$g_options['skin']['mask'] = '#SKIN#';
 $g_options['skin']['default'] = 'default';
+$g_options['skin']['actual'] = 'default';
 
 $g_options['mysql']['host'] = '127.0.0.1';
 $g_options['mysql']['username'] = 'root';

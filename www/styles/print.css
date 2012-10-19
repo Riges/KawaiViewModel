@@ -1,9 +1,0 @@
-#header, #mainmenu, #submenu
-{
-	display: none;
-}
-#footer, .smallbox
-{
-	margin-top: 1em;
-	border-top: 1px solid black;
-}

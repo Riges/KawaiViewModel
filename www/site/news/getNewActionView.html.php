@@ -33,7 +33,7 @@ tinyMCE.init({
 			<td>
 				date de la publication : <input type="text" name="news_date" id="news_date" size="10" maxlength="10" />
 				<script language="javascript" type="text/javascript">
-					jQuery("#news_date").datepicker(jQuery.extend({}, jQuery.datepicker.regional["fr"], {     firstDay: 1,     changeFirstDay: false,    dateFormat: "dd/mm/yy",     showOn: "button",     buttonImage: "<?php echo $this->createUriFromBase('img/calendar.gif'); ?>",     buttonImageOnly: true }));
+					jQuery("#news_date").datepicker(jQuery.extend({}, jQuery.datepicker.regional["fr"], {     firstDay: 1,     changeFirstDay: false,    dateFormat: "dd/mm/yy",     showOn: "button",     buttonImage: "<?php echo $this->createUriFromBase('img/#SKIN#/calendar.gif'); ?>",     buttonImageOnly: true }));
 				</script>
 			</td>
 		</tr>

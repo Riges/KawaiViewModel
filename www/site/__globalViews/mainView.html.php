@@ -38,11 +38,11 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 		
 		<script type='text/javascript' src="<?php echo $this->createUriFromBase('script/knb.js'); ?>"></script>
 		
-		<link rel="stylesheet" href="<?php echo $this->createUriFromBase('styles/screen.css'); ?>" type="text/css" media="screen" />
-		<link rel="stylesheet" href="<?php echo $this->createUriFromBase('styles/ui.datepicker.css'); ?>" type="text/css" media="screen" />
-		<link rel="stylesheet" href="<?php echo $this->createUriFromBase('styles/print.css'); ?>" type="text/css" media="print" />
+		<link rel="stylesheet" href="<?php echo $this->createUriFromBase('style/#SKIN#s/screen.css'); ?>" type="text/css" media="screen" />
+		<link rel="stylesheet" href="<?php echo $this->createUriFromBase('style/#SKIN#s/ui.datepicker.css'); ?>" type="text/css" media="screen" />
+		<link rel="stylesheet" href="<?php echo $this->createUriFromBase('style/#SKIN#s/print.css'); ?>" type="text/css" media="print" />
 		<!--[if IE]>
-		<link rel="stylesheet" href="<?php echo $this->createUriFromBase('styles/internet-explorer.css'); ?>" type="text/css" media="screen" />
+		<link rel="stylesheet" href="<?php echo $this->createUriFromBase('style/#SKIN#s/internet-explorer.css'); ?>" type="text/css" media="screen" />
 		<![endif]-->
 		
 	</head>
@@ -69,8 +69,8 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 		</div>
 		<div id="mainmenu">
 			<ul>
-				<li><a href="<?php echo $this->createUriFromBase('news'); ?>" style="background-image: url('<?php echo $this->createUriFromBase('img/mainmenu-btn-news.png'); ?>')">News</a></li>
-				<li><a href="<?php echo $this->createUriFromBase('photos'); ?>" style="background-image: url('<?php echo $this->createUriFromBase('img/mainmenu-btn-photos.png'); ?>')">Photos</a></li>
+				<li><a href="<?php echo $this->createUriFromBase('news'); ?>" style="background-image: url('<?php echo $this->createUriFromBase('img/#SKIN#/mainmenu-btn-news.png'); ?>')">News</a></li>
+				<li><a href="<?php echo $this->createUriFromBase('photos'); ?>" style="background-image: url('<?php echo $this->createUriFromBase('img/#SKIN#/mainmenu-btn-photos.png'); ?>')">Photos</a></li>
 			</ul>
 		</div>		
 		<div id="main">
