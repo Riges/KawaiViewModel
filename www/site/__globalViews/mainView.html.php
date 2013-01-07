@@ -41,7 +41,11 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 		<!--[if IE]>
 		<link rel="stylesheet" href="<?php echo $this->createUriFromBase('style/#SKIN#s/internet-explorer.css'); ?>" type="text/css" media="screen" />
 		<![endif]-->
-		
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('input, textarea').placeholder();
+			});
+		</script>
 	</head>
 	<body>
 		<div id="bg-left"></div><div id="bg-right"></div>

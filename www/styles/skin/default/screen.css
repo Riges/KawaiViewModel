@@ -6,6 +6,11 @@ body
 	font-family: sans-serif;
 	color: #13c3fe;
 }
+
+.placeholder {
+	color: #999; 
+}
+
 #bg-left, #bg-right
 {
 	z-index: -1;
