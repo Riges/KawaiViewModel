@@ -27,7 +27,11 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 
 		<script type="text/javascript">root_url = "<?php echo ROOT_URL; ?>";</script>
 		<script type='text/javascript' src="<?php echo $this->createUriFromBase($g_options['jquery']['debug'] ? 'script/jquery.js' : 'script/jquery.min.js'); ?>"></script>
+		<script type='text/javascript' src="<?php echo $this->createUriFromBase('script/jsrender.js'); ?>"></script>
+		<script type='text/javascript' src="<?php echo $this->createUriFromBase('script/jquery.observable.js'); ?>"></script>
+		<script type='text/javascript' src="<?php echo $this->createUriFromBase('script/jquery.views.js'); ?>"></script>
 		<script type='text/javascript' src="<?php echo $this->createUriFromBase($g_options['bootstrap']['debug'] ? 'script/bootstrap.js' : 'script/bootstrap.min.js'); ?>"></script>
+		<script type='text/javascript' src="<?php echo $this->createUriFromBase($g_options['bootstrap']['debug'] ? 'script/jquery.placeholder.js' : 'script/jquery.placeholder.min.js'); ?>"></script>
 		<script type='text/javascript' src="<?php echo $this->createUriFromBase('script/knb.js'); ?>"></script>
 		
 		<script type='text/javascript' src="<?php echo $this->createUriFromBase($g_options['bootstrap']['debug'] ? 'style/#SKIN#s/bootstrap.js' : 'style/#SKIN#s/bootstrap.min.js'); ?>"></script>
