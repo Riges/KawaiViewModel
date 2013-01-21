@@ -92,20 +92,20 @@ class Vbf_Mvc_FrontController
 
 	public function formatUri($uri, $urlencode = false)
 	{
-		global $g_option;
+		global $g_options;
 		$search = array();		
 		$replace = array();
 
-		if(array_key_exists('skin', $g_option) && array_key_exists('mask', $g_option['skin']))
+		if(array_key_exists('skin', $g_options) && array_key_exists('mask', $g_options['skin']))
 		{
-			if(array_key_exists('actual', $g_option['skin']) && array_key_exists('url', $g_option['skin']))
+			if(array_key_exists('actual', $g_options['skin']) && array_key_exists('url', $g_options['skin']))
 			{
-				$search[] = $g_option['skin']['mask'];
-				$replace[] = $g_option['skin']['url'].$g_option['skin']['actual'];
+				$search[] = $g_options['skin']['mask'];
+				$replace[] = $g_options['skin']['url'].$g_options['skin']['actual'];
 			}
 			else
 			{
-				$search[] = $g_option['skin']['mask'].'/';
+				$search[] = $g_options['skin']['mask'].'/';
 				$replace[] = '';
 			}
 		}
