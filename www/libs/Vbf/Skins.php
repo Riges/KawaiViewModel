@@ -100,6 +100,7 @@ class Vbf_Skins
      * in the HTML output of a skin.
      *
      * @param string $localFileName Path of the file relative to the skin directory.
+     * @throws Exception
      * @return The URL where the specified file could be found. An exception is thrown otherwise.
      */
     public function getFileURL($localFileName)
@@ -116,6 +117,7 @@ class Vbf_Skins
      * Get the absolute file path where the specified file could be found.
      *
      * @param string $localFileName Path of the file relative to the skin directory.
+     * @throws Exception
      * @return  The absolute path where the specified file could be found. An exception is thrown otherwise.
      */
     public function getFilePath($localFileName)

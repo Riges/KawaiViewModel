@@ -50,7 +50,7 @@ class Vbf_MySQL extends mysqli
         if ($this->errno) {
             $error = $this->error;
             $this->rollback();
-            $this->ThrowQueryError($query);
+            $this->ThrowQueryError($query, $error);
             return null;
         } else {
             return $result;
@@ -63,7 +63,7 @@ class Vbf_MySQL extends mysqli
         if ($this->errno) {
             $error = $this->error;
             $this->rollback();
-            $this->ThrowQueryError($query);
+            $this->ThrowQueryError($query, $error);
             return null;
         } else {
             return $result;
