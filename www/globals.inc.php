@@ -14,7 +14,7 @@ function knb_exception_handler($exception)
 
 	/* For most users we want to display either the configured message if possible or a short error message.
 	 */
-	if (!isset($g_options['error']['debug']) || $g_options['error']['debug'] !== TRUE)
+    if(!(isset($g_options['error']['debug']) && $g_options['error']['debug'] === TRUE))
 	{
 		if (isset($g_options['error']['redirect'])
 			&& $g_options['error']['redirect'] !== FALSE
