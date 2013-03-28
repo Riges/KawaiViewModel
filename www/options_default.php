@@ -26,7 +26,7 @@ $g_options['mvc']['debug'] = FALSE;
  * option to TRUE to get the standard version.
  */
 $g_options['jquery']['debug'] = FALSE;
-$g_options['bootsrap']['debug'] = FALSE;
+$g_options['bootstrap']['debug'] = FALSE;
 
 $g_options['autoload'][] = array(
 	'regex' => '/(.*)/',
