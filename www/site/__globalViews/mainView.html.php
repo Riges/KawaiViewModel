@@ -43,13 +43,9 @@ $title = htmlspecialchars($this->title);
           media="screen"/>
     <link rel="stylesheet" href="<?php echo $this->createUriFromBase('style/#SKIN#/print.css'); ?>" type="text/css"
           media="print"/>
-    <!--[if IE]>
-    <link rel="stylesheet" href="<?php echo $this->createUriFromBase('style/#SKIN#/internet-explorer.css'); ?>"
-          type="text/css" media="screen"/>
-    <![endif]-->
     <script type="text/javascript">
         $(document).ready(function () {
-            $('input, textarea').placeholder();
+            $("input, textarea").placeholder();
         });
     </script>
 </head>
