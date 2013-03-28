@@ -61,9 +61,9 @@ $title = htmlspecialchars($this->title);
         <?php if ($g_user->isAnonymous()): ?>
             <form id="loginform" action="<?php echo $this->createUriFromBase('login'); ?>" method="post"
                   onsubmit="doLogin();return false;">
-                Utilisateur :
+                <label for="login">Utilisateur :</label>
                 <input id="login" name="login" type="text"/>
-                Mot de passe :
+                <label for="password">Mot de passe :</label>
                 <input id="password" name="password" type="password"/>
                 <input id="submit_login" type="submit" value="Ok"/>
             </form>
@@ -114,14 +114,5 @@ $title = htmlspecialchars($this->title);
         Copyright © 2007 - <?php echo date('Y'); ?> Kawai Neko Box - Tous droits réservés pour tous les pays
     </div>
 </div>
-<script type="text/javascript">
-    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-    var pageTracker = _gat._getTracker("UA-5031780-1");
-    pageTracker._initData();
-    pageTracker._trackPageview();
-</script>
 </body>
 </html>
