@@ -16,783 +16,663 @@ class Vbf_Mvc_FrontController
 
 {
 
-	private $isInitialized = FALSE;
+    private $isInitialized = FALSE;
 
-	public function isInitialized() { return $isInitialized; }
+    public function isInitialized()
+    {
+        return $isInitialized;
+    }
 
-	
 
-	private $charset;
+    private $charset;
 
-	
 
-	private $siteFolder;
+    private $siteFolder;
 
-	public function getSiteFolder() { return $this->siteFolder; }
+    public function getSiteFolder()
+    {
+        return $this->siteFolder;
+    }
 
-	
 
-	private $baseUri;
+    private $baseUri;
 
-	
 
-	/**
+    /**
+     * Get the URI of the root of the website.
 
-	 * Get the URI of the root of the website.  
+     */
 
-	 */
+    public function getBaseUri()
 
-	public function getBaseUri()
+    {
 
-	{
+        return $this->baseUri;
 
-		return $this->baseUri;
+    }
 
-	}
 
-	
+    /**
+     * Get the current URI.
 
-	/**
+     */
 
-	 * Get the current URI.
+    public function getCurrentUri()
 
-	 */
+    {
 
-	public function getCurrentUri()
+        return $this->parsedUri['path'];
 
-	{
+    }
 
-		return $this->parsedUri['path'];
 
-	}
+    /**
+     * Get the URI of the current module.
 
-	
+     */
 
-	/**
+    public function getCurrentModuleUri()
 
-	 * Get the URI of the current module.
+    {
 
-	 */
+        return Path::combineAlways($this->baseUri, $this->dispatchResult['moduleUri']);
 
-	public function getCurrentModuleUri()
+    }
 
-	{
 
-		return Path::combineAlways($this->baseUri, $this->dispatchResult['moduleUri']);
+    /**
+     * Get the URI of the current resource.
 
-	}
+     */
 
-	
+    public function formatUri($uri, $urlencode = false)
+    {
+        global $g_options;
+        $search = array();
+        $replace = array();
 
-	/**
+        if (array_key_exists('skin', $g_options) && array_key_exists('mask', $g_options['skin'])) {
+            if (array_key_exists('actual', $g_options['skin']) && array_key_exists('url', $g_options['skin'])) {
+                $search[] = $g_options['skin']['mask'];
+                $replace[] = $g_options['skin']['url'] . $g_options['skin']['actual'];
+            } else {
+                $search[] = $g_options['skin']['mask'] . '/';
+                $replace[] = '';
+            }
+        }
+        $uri = str_replace($search, $replace, $uri);
+        if ($urlencode) $uri = urlencode($uri);
+        return $uri;
+    }
 
-	 * Get the URI of the current resource.
+    public function getCurrentResourceUri()
 
-	 */
+    {
+        return Path::combineAlways($this->baseUri, $this->dispatchResult['resourceUri']);
+    }
 
-	public function formatUri($uri, $urlencode = false)
-	{
-		global $g_options;
-		$search = array();		
-		$replace = array();
 
-		if(array_key_exists('skin', $g_options) && array_key_exists('mask', $g_options['skin']))
-		{
-			if(array_key_exists('actual', $g_options['skin']) && array_key_exists('url', $g_options['skin']))
-			{
-				$search[] = $g_options['skin']['mask'];
-				$replace[] = $g_options['skin']['url'].$g_options['skin']['actual'];
-			}
-			else
-			{
-				$search[] = $g_options['skin']['mask'].'/';
-				$replace[] = '';
-			}
-		}
-		$uri = str_replace($search, $replace, $uri);
-		if ($urlencode) $uri = urlencode($uri);
-		return $uri;
-	}
+    public function createUriFromResource($uri, $urlencode = false)
 
-	public function getCurrentResourceUri()
+    {
+        $uri = $this->formatUri($uri, $urlencode);
 
-	{
-		return Path::combineAlways($this->baseUri, $this->dispatchResult['resourceUri']);
-	}
+        return Path::combineWithAlternateRoot($this->getCurrentResourceUri(), $uri, $this->baseUri);
+    }
 
-	
 
-	public function createUriFromResource($uri, $urlencode = false)
+    public function createUriFromModule($uri, $urlencode = false)
 
-	{
-		$uri = $this->formatUri($uri, $urlencode);
+    {
+        $uri = $this->formatUri($uri, $urlencode);
 
-		return Path::combineWithAlternateRoot($this->getCurrentResourceUri(), $uri, $this->baseUri);
-	}
+        return Path::combineWithAlternateRoot($this->getCurrentModuleUri(), $uri, $this->baseUri);
+    }
 
-	
 
-	public function createUriFromModule($uri, $urlencode = false)
+    public function createUriFromBase($uri, $urlencode = false)
 
-	{
-		$uri = $this->formatUri($uri, $urlencode);
+    {
+        $uri = $this->formatUri($uri, $urlencode);
 
-		return Path::combineWithAlternateRoot($this->getCurrentModuleUri(), $uri, $this->baseUri);
-	}	
+        return Path::combineWithAlternateRoot($this->getBaseUri(), $uri, $this->baseUri);
+    }
 
-	
 
-	public function createUriFromBase($uri, $urlencode = false)
+    private $debugMode;
 
-	{
-		$uri = $this->formatUri($uri, $urlencode);
 
-		return Path::combineWithAlternateRoot($this->getBaseUri(), $uri, $this->baseUri);
-	}	
+    private static $validMethods = array('GET', 'POST', 'PUT', 'DELETE');
 
-	
+    private static $defaultContentType = 'text/plain';
 
-	private $debugMode;
+    private static $extensionContentType = array(
 
-	
+        'html' => array('application/xhtml+xml', 'text/html'), // RFC3236 & RFC2854
 
-	private static $validMethods = array('GET', 'POST', 'PUT', 'DELETE');
+        'txt' => array('text/plain'), // RFC3676
 
-	private static $defaultContentType = 'text/plain';
+        'xml' => array('application/xml'), // RFC3023
 
-	private static $extensionContentType = array(
+        'json' => array('application/json') // RFC4627
 
-		'html' => array('application/xhtml+xml', 'text/html'), // RFC3236 & RFC2854
+    );
 
-		'txt' => array('text/plain'), // RFC3676
 
-		'xml' => array('application/xml'), // RFC3023
+    public function __construct($siteFolder, $baseUri, $charset, $debugMode)
 
-		'json' => array('application/json') // RFC4627
+    {
 
-		);
+        $this->charset = $charset;
 
-		
+        $this->debugMode = ($debugMode === TRUE);
 
-	public function __construct($siteFolder, $baseUri, $charset, $debugMode)
+        $this->siteFolder = Path::rtrimSlashes($siteFolder);
 
-	{
+        $this->baseUri = $baseUri;
 
-		$this->charset = $charset;
+    }
 
-		$this->debugMode = ($debugMode === TRUE);
 
-		$this->siteFolder = Path::rtrimSlashes($siteFolder);
+    private function getModuleReflectionClass($path, $moduleName, $suffix)
 
-		$this->baseUri = $baseUri;
+    {
 
-	}
+        $baseName = $moduleName . $suffix;
 
-	
 
-	private function getModuleReflectionClass($path, $moduleName, $suffix)
+        $filePath = "{$this->siteFolder}/$path/$baseName.php";
 
-	{
+        require_once($filePath);
 
-		$baseName = $moduleName . $suffix;
+        return new ReflectionClass($baseName);
 
-		
+    }
 
-		$filePath = "{$this->siteFolder}/$path/$baseName.php";
 
-		require_once($filePath);
+    private function getDispatcherInstance($path, $moduleName)
 
-		return new ReflectionClass($baseName);
+    {
 
-	}
+        return $this->getModuleReflectionClass($path, $moduleName,
 
-	
+            '_Dispatcher')->newInstance();
 
-	private function getDispatcherInstance($path, $moduleName)
+    }
 
-	{
 
-		return $this->getModuleReflectionClass($path, $moduleName,
+    private function getControllerReflectionClass($path, $moduleName)
 
-			'_Dispatcher')->newInstance();
+    {
 
-	}
+        return $this->getModuleReflectionClass($path, $moduleName,
 
-	
+            '_Controller');
 
-	private function getControllerReflectionClass($path, $moduleName)
+    }
 
-	{
 
-		return $this->getModuleReflectionClass($path, $moduleName,
+    private function resolvePath($pathArray, $currentPathArray = array(), $parameters = array(),
 
-			'_Controller');
+                                 $moduleUriArray = array(), $resourceUriArray = array())
 
-	}
+    {
 
-	
+        $currentPathString = implode('/', $currentPathArray);
 
-	private function resolvePath($pathArray, $currentPathArray = array(), $parameters = array(),
+        $moduleName = (count($currentPathArray) > 0) ? end($currentPathArray) : 'root';
 
-		$moduleUriArray = array(), $resourceUriArray = array())
+        $dispatcher = $this->getDispatcherInstance($currentPathString, $moduleName);
 
-	{
+        $rules = $dispatcher->getDispatchRules();
 
-		$currentPathString = implode('/', $currentPathArray);
 
-		$moduleName = (count($currentPathArray) > 0) ? end($currentPathArray) : 'root';
+        $pathArraylength = count($pathArray);
 
-		$dispatcher = $this->getDispatcherInstance($currentPathString, $moduleName);
+        foreach ($rules as $rule) {
 
-		$rules = $dispatcher->getDispatchRules();
+            $type = $rule['type'];
 
-		
+            // If the rule is an action is the method OK ?
 
-		$pathArraylength = count($pathArray);
+            if (($type == 'action') && ($rule['method'] != $this->method)) continue;
 
-		foreach($rules as $rule)
 
-		{
+            $url = $rule['url'];
 
-			$type = $rule['type'];
+            $paramCount = $rule['params'];
 
-			// If the rule is an action is the method OK ?
 
-			if ( ($type == 'action') && ($rule['method'] != $this->method) ) continue;
+            $elementUsed = $paramCount + (($url == '') ? 0 : 1);
 
-			
 
-			$url = $rule['url'];
+            // Is there enough path elements to consume ?
 
-			$paramCount = $rule['params'];
+            if ($pathArraylength < $elementUsed) continue;
 
-			
 
-			$elementUsed = $paramCount + ( ($url == '') ? 0 : 1 );
+            // Is the name of the action/module the one we seek ?
 
-			
+            $urlInPath = '';
 
-			// Is there enough path elements to consume ?
+            if (array_key_exists($paramCount, $pathArray)) {
 
-			if ($pathArraylength < $elementUsed) continue;
+                $urlInPath = $pathArray[$paramCount];
 
-			
+            }
 
-			// Is the name of the action/module the one we seek ?
+            if ($urlInPath != $url) continue;
 
-			$urlInPath = '';
 
-			if (array_key_exists($paramCount, $pathArray))
+            // Extract the parameters if there are some
 
-			{
+            $currentParameters = array();
 
-				$urlInPath = $pathArray[$paramCount];
+            if ($paramCount > 0) {
 
-			}
+                $currentParameters = array_slice($pathArray, 0, $paramCount);
 
-			if ($urlInPath != $url) continue;
+                $parameters = array_merge($parameters, $currentParameters);
 
-			
+            }
 
-			// Extract the parameters if there are some
 
-			$currentParameters = array();
+            if ($type == 'module') {
 
-			if ($paramCount > 0)
+                array_push($currentPathArray, $rule['name']);
 
-			{
+                array_push($moduleUriArray, end($currentPathArray));
 
-				$currentParameters = array_slice($pathArray, 0, $paramCount);
+                array_push($resourceUriArray, end($currentPathArray));
 
-				$parameters = array_merge($parameters, $currentParameters);
+                if ($paramCount > 0) {
 
-			}
+                    $moduleUriArray = array_merge($moduleUriArray, $currentParameters);
 
-			
+                    $resourceUriArray = array_merge($resourceUriArray, $currentParameters);
 
-			if ($type == 'module')
+                }
 
-			{
 
-				array_push($currentPathArray, $rule['name']);
+                return $this->resolvePath(array_slice($pathArray, $elementUsed),
 
-				array_push($moduleUriArray, end($currentPathArray));
+                    $currentPathArray, $parameters, $moduleUriArray, $resourceUriArray);
 
-				array_push($resourceUriArray, end($currentPathArray));
+            } else if ($type == 'action') {
 
-				if ($paramCount > 0)
+                if ($pathArraylength - $elementUsed != 0) return NULL;
 
-				{
 
-					$moduleUriArray = array_merge($moduleUriArray, $currentParameters);
+                if ($paramCount > 0) {
 
-					$resourceUriArray = array_merge($resourceUriArray, $currentParameters);
+                    $resourceUriArray = array_merge($resourceUriArray, $currentParameters);
 
-				}
+                }
 
-				
 
-				return $this->resolvePath(array_slice($pathArray, $elementUsed),
+                foreach ($parameters as $name => $value) {
 
-					$currentPathArray, $parameters, $moduleUriArray, $resourceUriArray);
+                    $parameters[$name] = urldecode($value);
 
-			}
+                }
 
-			else if($type == 'action')
 
-			{
+                return array(
 
-				if ($pathArraylength - $elementUsed != 0) return NULL;
+                    'modulePath' => "{$this->siteFolder}/$currentPathString",
 
-				
+                    'moduleName' => $moduleName,
 
-				if ($paramCount > 0)
+                    'parameters' => $parameters,
 
-				{
+                    'moduleUri' => '/' . implode($moduleUriArray, '/'),
 
-					$resourceUriArray = array_merge($resourceUriArray, $currentParameters);
+                    'resourceUri' => '/' . implode($resourceUriArray, '/'),
 
-				}
+                    'controller' => $this->getControllerReflectionClass($currentPathString, $moduleName),
 
-				
+                    'actionName' => $rule['name']
 
-				foreach($parameters as $name => $value)
+                );
 
-				{
+            } else {
 
-					$parameters[$name] = urldecode($value);
+                throw new Exception("Unknown type : $type");
 
-				}
+            }
 
-								
+        }
 
-				return array(
+    }
 
-					'modulePath' => "{$this->siteFolder}/$currentPathString",
 
-					'moduleName' => $moduleName,
+    public function run()
 
-					'parameters' => $parameters,
+    {
 
-					'moduleUri' => '/' . implode($moduleUriArray, '/'),
+        if ($this->isInitialized !== TRUE) {
 
-					'resourceUri' => '/' . implode($resourceUriArray, '/'),
+            throw new Exception("Unitialized FrontController instance.");
 
-					'controller' => $this->getControllerReflectionClass($currentPathString, $moduleName),
+        }
 
-					'actionName' => $rule['name']
 
-					);
+        try {
 
-			}
+            if (!$this->dispatchSuccess) throw $this->dispatchException;
 
-			else
 
-			{
+            $this->controllerInstance->initialize($this,
 
-				throw new Exception("Unknown type : $type"); 
+                $this->dispatchResult['modulePath'], $this->dispatchResult['moduleName'],
 
-			} 
+                $this->method, $this->extension, $this->dispatchResult['actionName'],
 
-		}
+                $this->actionMethodName);
 
-	}
 
-	
+            header("Content-type: {$this->contentType}; charset={$this->charset}");
 
-	public function run()
+            $this->controllerInstance->onBefore();
 
-	{
+            $this->actionMethod->invokeArgs($this->controllerInstance, $this->dispatchResult['parameters']);
 
-		if ($this->isInitialized !== TRUE)
+            $this->controllerInstance->onAfter();
 
-		{
+        } catch (Vbf_Mvc_Exception404 $exception) {
 
-			throw new Exception("Unitialized FrontController instance.");
+            $this->on404();
 
-		}
+        }
 
-		
+    }
 
-		try
 
-		{
+    private $webserver_method;
 
-			if (!$this->dispatchSuccess) throw $this->dispatchException;
+    private $webserver_acceptHeader;
 
-			
+    private $webserver_uri;
 
-			$this->controllerInstance->initialize($this,
 
-				$this->dispatchResult['modulePath'], $this->dispatchResult['moduleName'],
+    private $method;
 
-				$this->method, $this->extension, $this->dispatchResult['actionName'],
+    private $relativeUri;
 
-				$this->actionMethodName);
+    private $parsedUri;
 
-			
+    private $extension;
 
-			header("Content-type: {$this->contentType}; charset={$this->charset}");
+    private $contentType;
 
-			$this->controllerInstance->onBefore();
+    private $dispatchResult;
 
-			$this->actionMethod->invokeArgs($this->controllerInstance, $this->dispatchResult['parameters']);
 
-			$this->controllerInstance->onAfter();
+    private $controllerInstance;
 
-		}
+    private $actionMethod;
 
-		catch(Vbf_Mvc_Exception404 $exception)
+    private $actionMethodName;
 
-		{
 
-			$this->on404();
+    /**
+     * Basic parsing of the URI and initialize all the fields linked to it.
 
-		}
+     */
 
-	}
+    private function initializeUri()
 
-	
+    {
 
-	private $webserver_method;
+        // Separate the uri in different composants
 
-	private $webserver_acceptHeader;
+        $this->parsedUri = parse_url($this->webserver_uri);
 
-	private $webserver_uri;
 
-	
+        $extensionRegex = '/(.*)\.([^.\/]*)$/';
 
-	private $method;
+        if (preg_match($extensionRegex, $this->parsedUri['path'], $matches)) {
 
-	private $relativeUri;
+            $this->parsedUri['path'] = $matches[1];
 
-	private $parsedUri;
+            $this->parsedUri['extension'] = $matches[2];
 
-	private $extension;
+        } else {
 
-	private $contentType;
+            $this->parsedUri['extension'] = NULL;
 
-	private $dispatchResult;
+        }
 
-	
 
-	private $controllerInstance;
+        $relativeUriRegex = '/^' . preg_quote($this->baseUri, '/') . '(.*)$/';
 
-	private $actionMethod;
+        $this->relativeUri = preg_replace($relativeUriRegex, '\1', $this->parsedUri['path']);
 
-	private $actionMethodName;
+        $this->relativeUri = Path::rtrimSlashes($this->relativeUri);
 
+    }
 
 
-	/**
+    /**
+     * Find the extension that will be used from the "Accept" header send by
+     * the user agent and if present the extension in the URI.
 
-	 * Basic parsing of the URI and initialize all the fields linked to it.
+     */
 
-	 */
+    private function initializeExtension()
 
-	private function initializeUri()
+    {
 
-	{
+        $this->extension = $this->parsedUri['extension'];
 
-		// Separate the uri in different composants
 
-		$this->parsedUri = parse_url($this->webserver_uri);
+        if ($this->extension == NULL || $this->extension == 'htm') {
 
-		
+            //FIXME: Use the accept header to select one.
 
-		$extensionRegex = '/(.*)\.([^.\/]*)$/';
+            $this->extension = 'html';
 
-		if (preg_match($extensionRegex, $this->parsedUri['path'], $matches))
+        }
 
-		{
 
-			$this->parsedUri['path'] = $matches[1];
+        if (!array_key_exists($this->extension, self::$extensionContentType)) {
 
-			$this->parsedUri['extension'] = $matches[2];
+            throw new Exception("Unknown extension : {$this->extension}.");
 
-		}
+        }
 
-		else
 
-		{
+        //FIXME: Use the accept header to select a content type.
 
-			$this->parsedUri['extension'] = NULL;
+        $this->contentType = 'text/html';
 
-		}
+    }
 
-		
 
-		$relativeUriRegex = '/^'.preg_quote($this->baseUri, '/').'(.*)$/';
+    /**
+     * Find the method that was requested by the user it mainly come from the
+     * method the browser sent, but could come from a special '_method' query
+     * argument (Because browsers don't support methods other than GET and
+     * POST)
 
-		$this->relativeUri = preg_replace($relativeUriRegex, '\1', $this->parsedUri['path']);
+     */
 
-		$this->relativeUri = Path::rtrimSlashes($this->relativeUri);
+    private function initializeMethod()
 
-	}
+    {
 
-	
+        $this->method = $this->webserver_method;
 
-	/**
+        if (array_key_exists('_method', $_GET)) {
 
-	 * Find the extension that will be used from the "Accept" header send by
+            $this->method = $_GET['_method'];
 
-	 * the user agent and if present the extension in the URI. 
+        }
 
-	 */
 
-	private function initializeExtension()
+        $this->method = strtoupper($this->method);
 
-	{
 
-		$this->extension = $this->parsedUri['extension'];
+        if (!in_array($this->method, self::$validMethods)) {
 
-		
+            throw new Exception("Unknown method : {$this->method}.");
 
-		if ($this->extension == NULL || $this->extension == 'htm')
+        }
 
-		{
+    }
 
-			//FIXME: Use the accept header to select one.
 
-			$this->extension = 'html';
+    private function dispatch()
 
-		}
+    {
 
-		
+        $this->dispatchException = NULL;
 
-		if (!array_key_exists($this->extension, self::$extensionContentType))
+        $this->dispatchSuccess = FALSE;
 
-		{
 
-			throw new Exception("Unknown extension : {$this->extension}.");  
+        try {
 
-		}
+            // Find the module (and his associated controller) along with the action
 
-		
+            $this->dispatchResult = $this->resolvePath(Path::explode($this->relativeUri));
 
-		//FIXME: Use the accept header to select a content type.
+            if ($this->dispatchResult === NULL) throw new Vbf_Mvc_Exception404("No module or action is matching this path ({$this->relativeUri}).");
 
-		$this->contentType = 'text/html';
 
-	}
+            // Instantiate the controller
 
-	
+            $controllerReflectionClass = $this->dispatchResult['controller'];
 
-	/**
+            $this->controllerInstance = $controllerReflectionClass->newInstance();
 
-	 * Find the method that was requested by the user it mainly come from the
 
-	 * method the browser sent, but could come from a special '_method' query
+            // Find the action method
 
-	 * argument (Because browsers don't support methods other than GET and
+            $this->actionMethodName = strtolower($this->method) . ucfirst($this->dispatchResult['actionName']) . 'Action';
 
-	 * POST)
+            $this->actionMethod = $controllerReflectionClass->getMethod($this->actionMethodName);
 
-	 */
 
-	private function initializeMethod()
+            $this->dispatchSuccess = TRUE;
 
-	{
+        } catch (Exception $exception) {
 
-		$this->method = $this->webserver_method;
+            $this->dispatchException = $exception;
 
-		if (array_key_exists('_method', $_GET))
+        }
 
-		{
+    }
 
-			$this->method = $_GET['_method'];
 
-		}
+    public function initialize($method, $uri, $acceptHeader)
 
-		
+    {
 
-		$this->method = strtoupper($this->method);
+        $this->isInitialized = FALSE;
 
-		
 
-		if (!in_array($this->method, self::$validMethods))
+        $this->webserver_method = $method;
 
-		{
+        $this->webserver_uri = $uri;
 
-			throw new Exception("Unknown method : {$this->method}.");
+        $this->webserver_acceptHeader = $acceptHeader;
 
-		}
 
-	}
+        $this->initializeUri();
 
-	
+        $this->initializeExtension();
 
-	private function dispatch()
+        $this->initializeMethod();
 
-	{
 
-		$this->dispatchException = NULL;
+        $this->dispatch();
 
-		$this->dispatchSuccess = FALSE;
 
-		
+        $this->isInitialized = TRUE;
 
-		try
+    }
 
-		{
 
-			// Find the module (and his associated controller) along with the action
+    /**
+     * Initialize all parameters from the "magic" $_SERVER array.
 
-			$this->dispatchResult = $this->resolvePath(Path::explode($this->relativeUri));
+     */
 
-			if ($this->dispatchResult === NULL) throw new Vbf_Mvc_Exception404("No module or action is matching this path ({$this->relativeUri}).");
+    public function initializeFromServerArray()
 
-			
+    {
 
-			// Instantiate the controller
+        $httpAccept = '';
 
-			$controllerReflectionClass = $this->dispatchResult['controller'];
+        if (array_key_exists('HTTP_ACCEPT', $_SERVER)) {
 
-			$this->controllerInstance = $controllerReflectionClass->newInstance();
+            $httpAccept = $_SERVER['HTTP_ACCEPT'];
 
-			
+        }
 
-			// Find the action method
+        $this->initialize($_SERVER["REQUEST_METHOD"],
 
-			$this->actionMethodName = strtolower($this->method) . ucfirst($this->dispatchResult['actionName']) . 'Action';
+            $_SERVER['REQUEST_URI'],
 
-			$this->actionMethod = $controllerReflectionClass->getMethod($this->actionMethodName);			
+            $httpAccept);
 
-			
+    }
 
-			$this->dispatchSuccess = TRUE;
 
-		}
+    public function on404()
 
-		catch(Exception $exception)
+    {
 
-		{
+        header("HTTP/1.0 404 Not Found", true, 404);
 
-			$this->dispatchException = $exception;
+        echo "<html><head><title>404, Not Found.</title></head><body><h1>404Error </h1><p>The page cannot be found.</p>";
 
-		}
+    }
 
-	}
 
-	
+    public function printDebugInfos()
 
-	public function initialize($method, $uri, $acceptHeader)
+    {
 
-	{
+        print("isInitialized = " . ($this->isInitialized ? 'TRUE' : 'FALSE') . "\n");
 
-		$this->isInitialized = FALSE;
+        print("debugMode = " . ($this->debugMode ? 'TRUE' : 'FALSE') . "\n");
 
-		
+        print("siteFolder = " . $this->siteFolder . "\n");
 
-		$this->webserver_method = $method;
+        print("baseUri = " . $this->baseUri . "\n");
 
-		$this->webserver_uri = $uri;
 
-		$this->webserver_acceptHeader = $acceptHeader;
+        print("webserver_method = " . $this->webserver_method . "\n");
 
-		
+        print("webserver_acceptHeader = " . $this->webserver_acceptHeader . "\n");
 
-		$this->initializeUri();
+        print("webserver_uri = " . $this->webserver_uri . "\n");
 
-		$this->initializeExtension();
 
-		$this->initializeMethod();
+        print("method = " . $this->method . "\n");
 
-		
+        print("relativeUri = " . $this->relativeUri . "\n");
 
-		$this->dispatch();
+        print("parsedUri = ");
+        print_r($this->parsedUri);
+        print("\n");
 
-		
+        print("extension = " . $this->extension . "\n");
 
-		$this->isInitialized = TRUE;
+        print("contentType = " . $this->contentType . "\n");
 
-	}	
 
-	
+        print("dispatchSuccess = " . ($this->dispatchSuccess ? 'TRUE' : 'FALSE') . "\n");
 
-	/**
+        print("dispatchResult = ");
+        print_r($this->dispatchResult);
+        print("\n");
 
-	 * Initialize all parameters from the "magic" $_SERVER array.
+        print("dispatchException = " . $this->dispatchException . "\n");
 
-	 */
-
-	public function initializeFromServerArray()
-
-	{
-
-		$httpAccept = '';
-
-		if (array_key_exists('HTTP_ACCEPT', $_SERVER))
-
-		{
-
-			$httpAccept = $_SERVER['HTTP_ACCEPT'];
-
-		}
-
-		$this->initialize($_SERVER["REQUEST_METHOD"],
-
-			$_SERVER['REQUEST_URI'],
-
-			$httpAccept);
-
-	}	
-
-	
-
-	public function on404()
-
-	{
-
-		header("HTTP/1.0 404 Not Found", true, 404);
-
-		echo "<html><head><title>404, Not Found.</title></head><body><h1>404Error </h1><p>The page cannot be found.</p>";
-
-	}
-
-	
-
-	public function printDebugInfos()
-
-	{
-
-		print("isInitialized = " . ($this->isInitialized ? 'TRUE' : 'FALSE') . "\n");
-
-		print("debugMode = " . ($this->debugMode ? 'TRUE' : 'FALSE') . "\n");
-
-		print("siteFolder = " . $this->siteFolder . "\n");
-
-		print("baseUri = " . $this->baseUri . "\n");
-
-		
-
-		print("webserver_method = " . $this->webserver_method . "\n");
-
-		print("webserver_acceptHeader = " . $this->webserver_acceptHeader . "\n");
-
-		print("webserver_uri = " . $this->webserver_uri . "\n");
-
-		
-
-		print("method = " . $this->method . "\n");
-
-		print("relativeUri = " . $this->relativeUri . "\n");
-
-		print("parsedUri = "); print_r($this->parsedUri); print("\n");
-
-		print("extension = " . $this->extension . "\n");
-
-		print("contentType = " . $this->contentType . "\n");
-
-		
-
-		print("dispatchSuccess = " . ($this->dispatchSuccess ? 'TRUE' : 'FALSE') . "\n");
-
-		print("dispatchResult = "); print_r($this->dispatchResult); print("\n");
-
-		print("dispatchException = " . $this->dispatchException . "\n");
-
-	}
+    }
 
 }
 
