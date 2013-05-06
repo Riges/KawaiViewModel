@@ -91,8 +91,8 @@ class Vbf_Mvc_FrontController
         $search = array();
         $replace = array();
 
-        if (array_key_exists('skin', $g_options) && array_key_exists('mask', $g_options['skin'])) {
-            if (array_key_exists('actual', $g_options['skin']) && array_key_exists('url', $g_options['skin'])) {
+        if (isset($g_options['skin']['mask'])) {
+            if (isset($g_options['skin']['url'])) {
                 $search[] = $g_options['skin']['mask'];
                 $replace[] = $g_options['skin']['url'] . $g_options['skin']['actual'];
             } else {
