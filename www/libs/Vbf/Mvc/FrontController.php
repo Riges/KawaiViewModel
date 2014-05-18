@@ -10,14 +10,123 @@ class Vbf_Mvc_FrontController
      */
     private $serviceContainer;
 
-    public function getServiceContainer(){
-        return $this->serviceContainer;
-    }
-
     /**
      * @var bool
      */
     private $isInitialized = FALSE;
+
+    /**
+     * @var
+     */
+    private $charset;
+
+    /**
+     * @var string
+     */
+    private $siteFolder;
+
+    /**
+     * @var
+     */
+    private $baseUri;
+
+    /**
+     * @var bool
+     */
+    private $debugMode;
+
+    /**
+     * @var array
+     */
+    private static $validMethods = array('GET', 'POST', 'PUT', 'DELETE');
+    /**
+     * @var string
+     */
+    private static $defaultContentType = 'text/plain';
+    /**
+     * @var array
+     */
+    private static $extensionContentType = array(
+        'html' => array('application/xhtml+xml', 'text/html'), // RFC3236 & RFC2854
+        'txt' => array('text/plain'), // RFC3676
+        'xml' => array('application/xml'), // RFC3023
+        'json' => array('application/json'), // RFC4627
+        'modal' => array('application/xhtml+xml', 'text/html') // RFC3236 & RFC2854
+    );
+
+    /**
+     * @var
+     */
+    private $webserver_method;
+    /**
+     * @var
+     */
+    private $webserver_acceptHeader;
+    /**
+     * @var
+     */
+    private $webserver_uri;
+
+    /**
+     * @var
+     */
+    private $method;
+    /**
+     * @var
+     */
+    private $relativeUri;
+    /**
+     * @var
+     */
+    private $parsedUri;
+    /**
+     * @var
+     */
+    private $extension;
+    /**
+     * @var
+     */
+    private $contentType;
+    /**
+     * @var
+     */
+    private $dispatchResult;
+
+    /**
+     * @var
+     */
+    private $controllerInstance;
+    /**
+     * @var
+     */
+    private $actionMethod;
+    /**
+     * @var
+     */
+    private $actionMethodName;
+
+    /**
+     * @param $siteFolder
+     * @param $baseUri
+     * @param $charset
+     * @param $debugMode
+     * @param null $serviceContainer
+     */
+    public function __construct($siteFolder, $baseUri, $charset, $debugMode, $serviceContainer = null)
+    {
+        $this->charset = $charset;
+        $this->debugMode = ($debugMode === TRUE);
+        $this->siteFolder = Vbf_Path::rtrimSlashes($siteFolder);
+        $this->baseUri = $baseUri;
+
+        if ($serviceContainer !== null) {
+            $this->serviceContainer = $serviceContainer;
+        }
+    }
+
+    public function getServiceContainer(){
+        return $this->serviceContainer;
+    }
 
     /**
      * @return bool
@@ -27,18 +136,6 @@ class Vbf_Mvc_FrontController
         return $this->isInitialized;
     }
 
-
-    /**
-     * @var
-     */
-    private $charset;
-
-
-    /**
-     * @var string
-     */
-    private $siteFolder;
-
     /**
      * @return string
      */
@@ -46,11 +143,6 @@ class Vbf_Mvc_FrontController
     {
         return $this->siteFolder;
     }
-
-    /**
-     * @var
-     */
-    private $baseUri;
 
     /**
      * Get the URI of the root of the website.
@@ -142,49 +234,6 @@ class Vbf_Mvc_FrontController
     {
         $uri = $this->formatUri($uri, $urlencode);
         return Vbf_Path::combineWithAlternateRoot($this->getBaseUri(), $uri, $this->baseUri);
-    }
-
-    /**
-     * @var bool
-     */
-    private $debugMode;
-
-    /**
-     * @var array
-     */
-    private static $validMethods = array('GET', 'POST', 'PUT', 'DELETE');
-    /**
-     * @var string
-     */
-    private static $defaultContentType = 'text/plain';
-    /**
-     * @var array
-     */
-    private static $extensionContentType = array(
-        'html' => array('application/xhtml+xml', 'text/html'), // RFC3236 & RFC2854
-        'txt' => array('text/plain'), // RFC3676
-        'xml' => array('application/xml'), // RFC3023
-        'json' => array('application/json'), // RFC4627
-        'modal' => array('application/xhtml+xml', 'text/html') // RFC3236 & RFC2854
-    );
-
-    /**
-     * @param $siteFolder
-     * @param $baseUri
-     * @param $charset
-     * @param $debugMode
-     * @param null $serviceContainer
-     */
-    public function __construct($siteFolder, $baseUri, $charset, $debugMode, $serviceContainer = null)
-    {
-        $this->charset = $charset;
-        $this->debugMode = ($debugMode === TRUE);
-        $this->siteFolder = Vbf_Path::rtrimSlashes($siteFolder);
-        $this->baseUri = $baseUri;
-
-        if ($serviceContainer !== null) {
-            $this->serviceContainer = $serviceContainer;
-        }
     }
 
     /**
@@ -326,57 +375,6 @@ class Vbf_Mvc_FrontController
             $this->on404();
         }
     }
-
-    /**
-     * @var
-     */
-    private $webserver_method;
-    /**
-     * @var
-     */
-    private $webserver_acceptHeader;
-    /**
-     * @var
-     */
-    private $webserver_uri;
-
-    /**
-     * @var
-     */
-    private $method;
-    /**
-     * @var
-     */
-    private $relativeUri;
-    /**
-     * @var
-     */
-    private $parsedUri;
-    /**
-     * @var
-     */
-    private $extension;
-    /**
-     * @var
-     */
-    private $contentType;
-    /**
-     * @var
-     */
-    private $dispatchResult;
-
-    /**
-     * @var
-     */
-    private $controllerInstance;
-    /**
-     * @var
-     */
-    private $actionMethod;
-    /**
-     * @var
-     */
-    private $actionMethodName;
 
     /**
      * Basic parsing of the URI and initialize all the fields linked to it.

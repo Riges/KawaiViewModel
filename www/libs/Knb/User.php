@@ -2,50 +2,16 @@
 class Knb_User
 {
     private $database;
-
-    public function getDatabase()
-    {
-        return $this->database;
-    }
-
     private $userId;
-
-    public function getId()
-    {
-        return $this->userId;
-    }
-
     private $rights;
     private $infos;
 
-    public function getRights()
+    public function __construct($userId, $database)
     {
-        $this->ensureRightsLoaded();
-
-        return $this->rights;
-    }
-
-    public function haveRight($right)
-    {
-        $this->ensureRightsLoaded();
-
-        return in_array($right, $this->rights);
-    }
-
-    public function haveAllRights($rights)
-    {
-        foreach ($rights as $right) {
-            if (!$this->haveRight($right)) return false;
-        }
-        return true;
-    }
-
-    public function haveOneRight($rights)
-    {
-        foreach ($rights as $right) {
-            if ($this->haveRight($right)) return true;
-        }
-        return false;
+        $this->database = $database;
+        $this->userId = $userId;
+        $this->updateInfos();
+        $this->rights = NULL;
     }
 
     private function ensureRightsLoaded()
@@ -107,12 +73,44 @@ EOD;
             throw new Exception('Invalid user specified in Knb_User::__construct()');
     }
 
-    public function __construct($userId, $database)
+    public function getDatabase()
     {
-        $this->database = $database;
-        $this->userId = $userId;
-        $this->updateInfos();
-        $this->rights = NULL;
+        return $this->database;
+    }
+
+    public function getId()
+    {
+        return $this->userId;
+    }
+
+    public function getRights()
+    {
+        $this->ensureRightsLoaded();
+
+        return $this->rights;
+    }
+
+    public function haveRight($right)
+    {
+        $this->ensureRightsLoaded();
+
+        return in_array($right, $this->rights);
+    }
+
+    public function haveAllRights($rights)
+    {
+        foreach ($rights as $right) {
+            if (!$this->haveRight($right)) return false;
+        }
+        return true;
+    }
+
+    public function haveOneRight($rights)
+    {
+        foreach ($rights as $right) {
+            if ($this->haveRight($right)) return true;
+        }
+        return false;
     }
 
     public function getLoginForDisplay()

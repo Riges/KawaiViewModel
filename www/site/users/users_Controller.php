@@ -5,6 +5,14 @@ require_once('users_Model.php');
 
 class Users_Controller extends Knb_Controller
 {
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $serviceContainer
+     */
+    public function __construct($serviceContainer) {
+        parent::__construct($serviceContainer);
+        Users::setDatabase($this->getServiceContainer()->get('database'));
+    }
+
 	private static function getUserAsArrayOr404($username)
 	{
 		$userArray = Users::getUserAsArray($username);

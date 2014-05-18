@@ -9,6 +9,13 @@ class Knb_ConnectedUser extends Knb_User
     const COOKIE_EXPIRE_DAYS = 30;
     private $sessionId;
 
+    public function __construct($database)
+    {
+        $this->sessionId =$this->getSessionIdFromCookie();
+        parent::__construct($this->getUserFromSessionId($this->sessionId, $database), $database);
+        $this->trimSessions();
+    }
+
     private function getSessionIdFromCookie()
     {
         if (!array_key_exists(self::COOKIE_NAME, $_COOKIE)) return NULL;
@@ -30,13 +37,6 @@ EOD;
         return $session_infos->user_id;
     }
 
-    public function __construct($database)
-    {
-        $this->sessionId =$this->getSessionIdFromCookie();
-        parent::__construct($this->getUserFromSessionId($this->sessionId, $database), $database);
-        $this->trimSessions();
-    }
-
     private function trimSessions()
     {
         $query = <<< EOD
@@ -48,33 +48,15 @@ EOD;
         $this->getDatabase()->query($query, array(self::COOKIE_EXPIRE_DAYS));
     }
 
-    private static function generateSessionKey()
+    public static function generateSessionKey()
     {
         return md5(uniqid(rand(), true));
     }
 
-    private static function createCookie($session_key)
+    public static function createCookie($session_key)
     {
         setcookie(self::COOKIE_NAME, $session_key,
             time() + 60 * 60 * 24 * self::COOKIE_EXPIRE_DAYS, ROOT_URL);
-    }
-
-    public static function login($login, $password)
-    {
-        self::trimSessions();
-
-        global $g_database;
-        $user_id = $g_database->fetchOne(
-            "SELECT user_id FROM user WHERE user_login = ? AND user_password_md5 = MD5(CONCAT(user_password_nonce, ?))",
-            array($login, $password));
-
-        if ($user_id == NULL) throw new Exception("Invalid user name or password");
-
-        $session_key = self::generateSessionKey();
-
-        $g_database->query("INSERT INTO session (user_id, session_key) VALUES (?, ?)", array($user_id, $session_key));
-
-        self::createCookie($session_key);
     }
 
     public function logout()

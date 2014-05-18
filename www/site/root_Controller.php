@@ -5,6 +5,14 @@ require_once('Knb/ConnectedUser.php');
 
 class Root_Controller extends Knb_Controller
 {
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $serviceContainer
+     */
+    public function __construct($serviceContainer) {
+        parent::__construct($serviceContainer);
+        Root::setDatabase($this->getServiceContainer()->get('database'));
+    }
+
     public function getAction()
     {
         header("Location: " . ROOT_URL . "news/");
@@ -27,7 +35,7 @@ class Root_Controller extends Knb_Controller
         $password = $_POST['password'];
         $this->setParameter('error', null);
         try {
-            Knb_ConnectedUser::login($login, $password);
+            Root::login($login, $password);
             if ($this->getExtension() == 'html') $this->back();
         } catch (Exception $error) {
             $this->setParameter('error', $error);

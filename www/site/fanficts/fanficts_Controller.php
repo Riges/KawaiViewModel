@@ -4,6 +4,14 @@ require_once('fanficts_Model.php');
 
 class Fanficts_Controller extends Knb_Controller
 {
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $serviceContainer
+     */
+    public function __construct($serviceContainer) {
+        parent::__construct($serviceContainer);
+        Fanficts::setDatabase($this->getServiceContainer()->get('database'));
+    }
+
 	// GET knb.fr/fanficts/$user/$title
 	public function getAction($user, $title)
 	{

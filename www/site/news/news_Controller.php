@@ -5,6 +5,14 @@ require_once('news_Model.php');
 
 class News_Controller extends Knb_Controller
 {
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $serviceContainer
+     */
+    public function __construct($serviceContainer) {
+        parent::__construct($serviceContainer);
+        News::setDatabase($this->getServiceContainer()->get('database'));
+    }
+
 	private static function getNewsAsArrayOr404($year, $month, $day, $url_title)
 	{
 		$newsArray = News::getNewsAsArray($year, $month, $day, $url_title);
