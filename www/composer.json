@@ -1,0 +1,10 @@
+{
+    "config": {
+        "vendor-dir": "vendor"
+    },
+    "require": {
+        "symfony/dependency-injection": "2.4.*",
+        "symfony/class-loader": "2.4.*",
+        "zendframework/zendframework1" : "1.12.*"
+    }
+}

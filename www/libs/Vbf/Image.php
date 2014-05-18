@@ -149,7 +149,8 @@ class Vbf_Image
             imagesavealpha($new_image, true);
             imagealphablending($new_image, false);
         }
-        imagecopyresampled($new_image, $image, 0, 0, $this->top, $this->left, $this->width, $this->height, $this->image_width, $this->image_height);
+        if(isset($image))
+            imagecopyresampled($new_image, $image, 0, 0, $this->top, $this->left, $this->width, $this->height, $this->image_width, $this->image_height);
 
         $name = $show ? null : $this->dir . DIRECTORY_SEPARATOR . $this->name . '.' . $this->ext;
         if ($this->type == 'jpeg') imagejpeg($new_image, $name, $this->quality);
@@ -162,5 +163,3 @@ class Vbf_Image
     }
 
 }
-
-?>

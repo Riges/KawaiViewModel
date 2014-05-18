@@ -1,1 +1,6 @@
 /www/options.php
+# Composer
+/www/composer.phar
+/www/vendor/*
+*.php~
+.idea/

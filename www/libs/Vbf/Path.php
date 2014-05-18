@@ -1,7 +1,17 @@
 <?php
 
-class Path
+/**
+ * Class Path
+ */
+class Vbf_Path
 {
+    /**
+     * @param $path1
+     * @param $path2
+     * @param $root
+     * @param string $separator
+     * @return string
+     */
     public static function combineWithAlternateRoot($path1, $path2, $root, $separator = '/')
     {
         if (strlen($path1) == 0) return $path2;
@@ -15,6 +25,12 @@ class Path
         }
     }
 
+    /**
+     * @param $path1
+     * @param $path2
+     * @param string $separator
+     * @return string
+     */
     public static function combine($path1, $path2, $separator = '/')
     {
         if (strlen($path1) == 0) return $path2;
@@ -28,6 +44,12 @@ class Path
         }
     }
 
+    /**
+     * @param $path1
+     * @param $path2
+     * @param string $separator
+     * @return string
+     */
     public static function combineAlways($path1, $path2, $separator = '/')
     {
         if (strlen($path1) == 0) return $path2;
@@ -78,5 +100,3 @@ class Path
         }
     }
 }
-
-?>

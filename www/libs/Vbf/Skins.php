@@ -1,12 +1,32 @@
 <?php
 
+/**
+ * Class Vbf_Skins
+ */
 class Vbf_Skins
 {
+    /**
+     * @var
+     */
     private $baseDirectory;
+    /**
+     * @var
+     */
     private $baseUrl;
+    /**
+     * @var
+     */
     private $defaultSkin;
+    /**
+     * @var
+     */
     private $currentSkin;
 
+    /**
+     * @param $baseDirectory
+     * @param $baseUrl
+     * @param $defaultSkin
+     */
     public function __construct($baseDirectory, $baseUrl, $defaultSkin)
     {
         $this->baseDirectory = $baseDirectory;
@@ -62,11 +82,21 @@ class Vbf_Skins
         return NULL;
     }
 
+    /**
+     * @param $skinName
+     * @param $localFileName
+     * @return string
+     */
     private function getSkinFilePath($skinName, $localFileName)
     {
         return $this->baseDirectory . $skinName . '/' . $localFileName;
     }
 
+    /**
+     * @param $skinName
+     * @param $localFileName
+     * @return string
+     */
     private function getSkinFileUrl($skinName, $localFileName)
     {
         return $this->baseUrl . $skinName . '/' . $localFileName;
@@ -100,7 +130,6 @@ class Vbf_Skins
      * in the HTML output of a skin.
      *
      * @param string $localFileName Path of the file relative to the skin directory.
-     * @throws Exception
      * @return The URL where the specified file could be found. An exception is thrown otherwise.
      */
     public function getFileURL($localFileName)
@@ -117,7 +146,6 @@ class Vbf_Skins
      * Get the absolute file path where the specified file could be found.
      *
      * @param string $localFileName Path of the file relative to the skin directory.
-     * @throws Exception
      * @return  The absolute path where the specified file could be found. An exception is thrown otherwise.
      */
     public function getFilePath($localFileName)
@@ -166,5 +194,3 @@ class Vbf_Skins
         require($this->GetTemplatePath($__templateName));
     }
 }
-
-?>

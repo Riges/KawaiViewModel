@@ -7,7 +7,7 @@ function parse_accept_header($header)
 {
     $medias = explode(',', $header);
     $result = array();
-    $i = 0;
+    //$i = 0;
     foreach ($medias as $media) {
         $infos = array('q' => 1);
 
@@ -45,10 +45,8 @@ function parse_accept_header($header)
  */
 function get_accept_quality($contentType, $acceptHeader)
 {
-    $quality = -1;
-    foreach ($acceptHeader as $media) {
+    //$quality = -1;
+    /*foreach ($acceptHeader as $media) {
 
-    }
+    }*/
 }
-
-?>

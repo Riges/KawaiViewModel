@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Vbf_MySQL
+ */
 class Vbf_MySQL extends mysqli
 {
     /**
@@ -20,16 +23,28 @@ class Vbf_MySQL extends mysqli
         SatimoPortalPage::ThrowFatalError('MySQL showQuery', '<pre>' . htmlentities($query) . '</pre>');
     }
 
+    /**
+     * @param $query
+     * @return mixed
+     */
     public function query_fetch_one($query)
     {
         return array_pop($this->query($query)->fetch_row());
     }
 
+    /**
+     * @param $query
+     * @return array
+     */
     public function query_fetch_one_row($query)
     {
         return $this->query($query)->fetch_assoc();
     }
 
+    /**
+     * @param string $query
+     * @return bool|mysqli_result|null
+     */
     public function query($query)
     {
         $result = parent::query($query);
@@ -43,6 +58,10 @@ class Vbf_MySQL extends mysqli
         }
     }
 
+    /**
+     * @param string $query
+     * @return bool|null
+     */
     public function real_query($query)
     {
 
@@ -57,6 +76,10 @@ class Vbf_MySQL extends mysqli
         }
     }
 
+    /**
+     * @param string $query
+     * @return bool|null
+     */
     public function multi_query($query)
     {
         $result = parent::multi_query($query);
@@ -70,5 +93,3 @@ class Vbf_MySQL extends mysqli
         }
     }
 }
-
-?>

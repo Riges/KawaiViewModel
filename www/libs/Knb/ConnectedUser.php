@@ -1,24 +1,21 @@
 <?php
 
-require_once('User.php');
-
 /**
  * Store an user session, it is persisted on the user-side via cookies.
  */
-class Knb_ConnectedUser
-    extends Knb_User
+class Knb_ConnectedUser extends Knb_User
 {
     const COOKIE_NAME = 'session_id';
     const COOKIE_EXPIRE_DAYS = 30;
     private $sessionId;
 
-    private static function getSessionIdFromCookie()
+    private function getSessionIdFromCookie()
     {
         if (!array_key_exists(self::COOKIE_NAME, $_COOKIE)) return NULL;
         else return $_COOKIE[self::COOKIE_NAME];
     }
 
-    private static function getUserFromSessionId($session_id)
+    private function getUserFromSessionId($session_id, $database)
     {
         if ($session_id == NULL) return -1;
 
@@ -28,23 +25,19 @@ class Knb_ConnectedUser
 			WHERE
 				session.session_key = ?
 EOD;
-        global $g_database;
-        $session_infos = $g_database->fetchRow($query, array($session_id));
-
+        $session_infos = $database->fetchRow($query, array($session_id));
         if ($session_infos == NULL) return -1;
-
         return $session_infos->user_id;
     }
 
-    public function __construct()
+    public function __construct($database)
     {
-        self::trimSessions();
-        $this->sessionId = self::getSessionIdFromCookie();
-
-        parent::__construct(self::getUserFromSessionId($this->sessionId));
+        $this->sessionId =$this->getSessionIdFromCookie();
+        parent::__construct($this->getUserFromSessionId($this->sessionId, $database), $database);
+        $this->trimSessions();
     }
 
-    private static function trimSessions()
+    private function trimSessions()
     {
         $query = <<< EOD
 			DELETE
@@ -52,7 +45,7 @@ EOD;
 				WHERE DATE_ADD(session_start_timestamp, INTERVAL ? DAY) < now();
 EOD;
         global $g_database;
-        $g_database->query($query, array(self::COOKIE_EXPIRE_DAYS));
+        $this->getDatabase()->query($query, array(self::COOKIE_EXPIRE_DAYS));
     }
 
     private static function generateSessionKey()
