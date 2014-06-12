@@ -69,15 +69,32 @@ class Users
 
 	public static function create($params)
 	{
-        self::$database->query("SET @seed = FLOOR(RAND() * 4294967296)");
-        self::$database->query("INSERT INTO user
-			(user_login, user_full_name, user_mail, user_password_nonce, user_password_md5)
-			VALUES (?, ?, ?, @seed, MD5(CONCAT(@seed, ?)))",
-			array(
-				$params['user_login'], $params['user_full_name'], $params['user_mail'], $params['user_password']
-				)
-			);
-
+		try
+		{
+			self::$database->beginTransaction();
+			self::$database->query("SET @seed = FLOOR(RAND() * 4294967296)");
+			self::$database->query("INSERT INTO user
+				(user_login, user_first_name, user_full_name, user_mail, user_password_nonce)
+				VALUES (?, ?, ?, ?, @seed)",
+				array(
+					$params['user_login'], $params['user_first_name'], $params['user_full_name'], $params['user_mail']
+					)
+				);
+			$user_id = (int)self::$database->fetchOne("SELECT LAST_INSERT_ID()");
+			self::$database->query("UPDATE user
+				SET user_password_md5 = MD5(CONCAT(user_password_nonce, ?))
+				WHERE user_id = ?",
+				array(
+					$params['user_password'],
+					$user_id
+					)
+				);
+			self::$database->commit();
+		} catch (Exception $e) {
+			self::$database->rollBack();
+			return 0;
+		}
+		
+		return $user_id;
 	}
-}
 ?>
