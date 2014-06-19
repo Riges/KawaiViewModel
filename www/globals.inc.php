@@ -45,6 +45,7 @@ require_once ROOT_PATH . '/services.php';
 
 $g_database = new Zend_Db_Adapter_Mysqli($g_options['mysql']);
 $g_database->setFetchMode(Zend_Db::FETCH_OBJ);
+$g_database->query("SET NAMES utf8");
 
 if (!defined('KNB_NO_DATABASE_ACCESS')) {
 
